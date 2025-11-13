@@ -11,19 +11,19 @@ import java.util.Optional;
 public class ExportadorCSV implements IExportador{
 
     private final EstadisticaCategoriaMaxima ecm;
-    private final EstadisticaHechoPorProvinciaDeUnaColeccion ehppc;
+    private final EstadisticaMaxHechosPorProvinciaDeUnaColeccion ehppc;
     private final EstadisticaHoraPorCategoria ehpc;
     private final EstadisticaProvinciaPorCategoria eppc;
     private final EstadisticaSpamEliminacion ese;
 
     public ExportadorCSV(Long idColeccion, String categoria) {
         this.ecm = new EstadisticaCategoriaMaxima();
-        this.ehppc = new EstadisticaHechoPorProvinciaDeUnaColeccion(idColeccion);
+        this.ehppc = new EstadisticaMaxHechosPorProvinciaDeUnaColeccion(idColeccion);
         this.ehpc = new EstadisticaHoraPorCategoria(categoria);
         this.eppc = new EstadisticaProvinciaPorCategoria(categoria);
         this.ese = new EstadisticaSpamEliminacion();
     }
-
+    /*
     @Override
     public String obtenerArchivoTipo(EstadisticasDTO estadisticas) {
         // Crear un espacio para escribir el CSV
@@ -70,5 +70,5 @@ public class ExportadorCSV implements IExportador{
 
         csv.flush();
         return writer.toString();
-    }
+    }*/
 }

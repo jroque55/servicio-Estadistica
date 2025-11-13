@@ -51,6 +51,8 @@ public class ClienteAgregador {
     //5 REVISAR COMO ES QUE SE SABE Q ES SPAM //ARREGLAR lo del block
     public List<String> obtenerDatosSolicitudesSpam() {
         return webClient.get().uri("/solicitudesSpam")
-                .retrieve().bodyToMono(EstadisticasDTO.class).block();
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .block();
     }
 }

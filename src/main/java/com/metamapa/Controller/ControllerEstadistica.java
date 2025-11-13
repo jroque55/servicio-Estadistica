@@ -5,11 +5,12 @@ import com.metamapa.Service.ServiceEstadistica;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/estadisticas")
+@RequestMapping("/estadisticas")
 public class ControllerEstadistica {
 
     private final ServiceEstadistica serviceEstadistica;
@@ -18,6 +19,7 @@ public class ControllerEstadistica {
         this.serviceEstadistica = service;
     }
 
+    //Que pueda recibir una especie de filtro y envie según corresponda
     @GetMapping("/ver")
     public ResponseEntity<EstadisticasDTO> verEstadisticas(){
         EstadisticasDTO estadisticas = serviceEstadistica.obtenerEstadisticas();

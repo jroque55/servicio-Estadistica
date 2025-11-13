@@ -1,27 +1,32 @@
 package com.metamapa.Domain.entities;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+import java.lang.annotation.Documented;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EstadisticaProvinciaPorCategoria implements InterfaceEstadistica {
+@Entity
+@DiscriminatorValue("MAXPROVINCIASEGUNCONCATEGORIA")
+public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     private final String categoria;
 
     // mapa provincia -> cantidad de hechos
     private final Map<String, Integer> provinciaConteo = new HashMap<>();
-    private String resultado = InterfaceEstadistica.RESULTADO;
 
     public EstadisticaProvinciaPorCategoria(String categoria) {
         this.categoria = categoria;
     }
 
-    @Override
     public void actualizarResultado() {
         provinciaConteo.clear();
-        resultado = InterfaceEstadistica.RESULTADO;
+        //Aca le setea que no tenga, medio raro
+        setResultado(RESULTADO);
 
         // obtener el singleton ClienteAgregador
-        ClienteAgregador cliente = ClienteAgregador.getInstance();
+        ClienteAgregador cliente = getClienteAgregador();
 
         if (cliente == null) {
             // no hay cliente disponible -> no se puede calcular
@@ -51,12 +56,8 @@ public class EstadisticaProvinciaPorCategoria implements InterfaceEstadistica {
 
         // construir resultado (opcional: mostrar el conteo)
         if (!provinciaConteo.isEmpty()) {
-            resultado = "Conteo de provincias para categoría '" + categoria + "': " + provinciaConteo;
+            setResultado("Conteo de provincias para categoría '" + categoria + "': " + provinciaConteo);
         }
-    }
-
-    public String getResultado() {
-        return resultado;
     }
 
     public Map<String, Integer> getProvinciaConteo() {
@@ -67,4 +68,3 @@ public class EstadisticaProvinciaPorCategoria implements InterfaceEstadistica {
         return categoria;
     }
 }
-

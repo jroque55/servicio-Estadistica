@@ -1,5 +1,8 @@
 package com.metamapa.Domain.entities;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -7,18 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-
-public class EstadisticaSpamEliminacion implements InterfaceEstadistica {
+@Entity
+@DiscriminatorValue("CANTSOLICITUDESSPAM")
+public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
 
     private final Map<String, Integer> mapaSpam = new HashMap<>();
-    private String resultado = InterfaceEstadistica.RESULTADO;
 
-    @Override
     public void actualizarResultado() {
         mapaSpam.clear();
-        resultado = InterfaceEstadistica.RESULTADO;
+        setResultado(RESULTADO);
 
-        ClienteAgregador cliente = ClienteAgregador.getInstance();
+        ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;
 
         List<String> items;
@@ -41,7 +43,7 @@ public class EstadisticaSpamEliminacion implements InterfaceEstadistica {
         if (mapaSpam.isEmpty()) return;
 
         Entry<String, Integer> max = Collections.max(mapaSpam.entrySet(), Comparator.comparingInt(Entry::getValue));
-        resultado = String.format("%s (%d)", max.getKey(), max.getValue());
+        setResultado(String.format("%s (%d)", max.getKey(), max.getValue()));
     }
 
     public Map<String, Integer> getMapaSpam() {

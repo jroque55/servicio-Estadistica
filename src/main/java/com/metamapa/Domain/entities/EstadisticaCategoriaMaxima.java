@@ -1,6 +1,7 @@
 package com.metamapa.Domain.entities;
 
-import lombok.Getter;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,18 +11,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-public class EstadisticaCategoriaMaxima implements InterfaceEstadistica {
+@Entity
+@DiscriminatorValue("MAXCATEGORIACONHECHOS")
+public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
 
     private final Map<String, Integer> mapaCategorias = new HashMap<>();
-    @Getter
-    private String resultado = InterfaceEstadistica.RESULTADO;
 
     @Override
     public void actualizarResultado() {
         mapaCategorias.clear();
-        resultado = InterfaceEstadistica.RESULTADO;
+        setResultado(RESULTADO);
 
-        ClienteAgregador cliente = ClienteAgregador.getInstance();
+        ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;
 
         List<String> categorias;
@@ -42,7 +43,7 @@ public class EstadisticaCategoriaMaxima implements InterfaceEstadistica {
 
         if (mapaCategorias.isEmpty()) return;
         Entry<String, Integer> max = Collections.max(mapaCategorias.entrySet(), Comparator.comparingInt(Entry::getValue));
-        resultado = String.format("%s (%d)", max.getKey(), max.getValue());
+        setResultado(String.format("%s (%d)", max.getKey(), max.getValue()));
     }
 
     public Map<String, Integer> getMapaCategorias() {
