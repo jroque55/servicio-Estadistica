@@ -1,27 +1,28 @@
 package com.metamapa.Domain.entities;
 
+import com.metamapa.Domain.dto.input.ProvCatDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import lombok.Data;
 
-import java.lang.annotation.Documented;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Data
 @Entity
 @DiscriminatorValue("MAXPROVINCIASEGUNCONCATEGORIA")
 public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     private final String categoria;
-
+    private Integer cantidad;
     // mapa provincia -> cantidad de hechos
-    private final Map<String, Integer> provinciaConteo = new HashMap<>();
+   // private final Map<String, Integer> provinciaConteo = new HashMap<>();
 
     public EstadisticaProvinciaPorCategoria(String categoria) {
         this.categoria = categoria;
     }
 
     public void actualizarResultado() {
-        provinciaConteo.clear();
+        //provinciaConteo.clear();
         //Aca le setea que no tenga, medio raro
         setResultado(RESULTADO);
 
@@ -33,33 +34,39 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
             return;
         }
 
-        List<String> provincias;
+        List<ProvCatDTO> datos;
         try {
-            provincias = cliente.obtenerEstadisticaAgregador("provincia", categoria);
+            datos = cliente.obtenerEstadisticaAgregador(categoria);
         } catch (Exception ex) {
             return;
         }
 
-        if (provincias == null || provincias.isEmpty()) {
+        if (datos == null || datos.isEmpty()) {
             return;
         }
 
-        // contar cuántas veces aparece cada provincia
-        for (String provinciaRaw : provincias) {
+        int maxCantidad = 0;
+        String provinciaMaxCategoria = null;
+
+        for (ProvCatDTO provinciaRaw : datos) {
             if (provinciaRaw == null) continue;
 
-            String provincia = provinciaRaw.trim();
-            if (provincia.isEmpty()) continue;
+            int cantidadActual = provinciaRaw.getCantidad().intValue();
 
-            provinciaConteo.put(provincia, provinciaConteo.getOrDefault(provincia, 0) + 1);
+            if (cantidadActual > maxCantidad) {
+                maxCantidad = cantidadActual;
+                provinciaMaxCategoria = provinciaRaw.getProvincia();
+            }
         }
+        this.setResultado(provinciaMaxCategoria);
+        this.setCantidad(maxCantidad);
 
         // construir resultado (opcional: mostrar el conteo)
-        if (!provinciaConteo.isEmpty()) {
-            setResultado("Conteo de provincias para categoría '" + categoria + "': " + provinciaConteo);
-        }
+//        if (!provinciaConteo.isEmpty()) {
+//            setResultado("Conteo de provincias para categoría '" + categoria + "': " + provinciaConteo);
+//        }
     }
-
+/*
     public Map<String, Integer> getProvinciaConteo() {
         return provinciaConteo;
     }
@@ -67,4 +74,6 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     public String getCategoria() {
         return categoria;
     }
+
+ */
 }

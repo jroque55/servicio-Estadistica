@@ -27,7 +27,7 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
 
         List<String> categorias;
         try {
-            categorias = cliente.obtenerEstadisticaAgregador("categoria",null);
+            categorias = cliente.obtenerEstadisticaAgregador();
         } catch (Exception ex) {
             return;
         }

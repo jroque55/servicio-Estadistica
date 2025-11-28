@@ -20,6 +20,7 @@ public abstract class InterfaceEstadistica {
     private String resultado;  //Sería el numero
     private String descripcion; //Sería el nombre de lo que diferecia la estadística
 
+
     // constante compartida que usan algunas implementaciones //Esto no lo entiendo mucho q digamos
     public static final String RESULTADO = "Sin resultado";
 

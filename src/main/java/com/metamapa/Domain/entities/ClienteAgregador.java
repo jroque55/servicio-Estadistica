@@ -1,6 +1,7 @@
 package com.metamapa.Domain.entities;
 
-import com.metamapa.Domain.dto.EstadisticasDTO;
+import com.metamapa.Domain.dto.input.ProvCatDTO;
+import com.metamapa.Domain.dto.input.SpamSummaryDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,7 +16,7 @@ public class ClienteAgregador {
     private static volatile ClienteAgregador INSTANCE;
 
     public ClienteAgregador(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl("http://localhost:8080/api").build();
+        this.webClient = builder.baseUrl("http://localhost:8080/estadisticas").build();
         // set singleton reference
         INSTANCE = this;
     }
@@ -36,23 +37,19 @@ public class ClienteAgregador {
                 .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
                 .block();
     }
-    public List<String> obtenerEstadisticaAgregador(String campo, String categoria) {
+    public List<ProvCatDTO> obtenerEstadisticaAgregador(String categoria) {
         return webClient.get()
-                .uri(uriBuilder -> {
-                    var b = uriBuilder.path("/Hecho").queryParam("campo", campo);
-                    if (categoria != null && !categoria.isEmpty()) b = b.queryParam("categoria", categoria);
-                    return b.build();
-                })
+                .uri("/categoria-provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<ProvCatDTO>>() {})
                 .block();
     }
 
     //5 REVISAR COMO ES QUE SE SABE Q ES SPAM //ARREGLAR lo del block
-    public List<String> obtenerDatosSolicitudesSpam() {
+    public SpamSummaryDTO obtenerDatosSolicitudesSpam() {
         return webClient.get().uri("/solicitudesSpam")
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .bodyToMono(SpamSummaryDTO.class) // mapea directo al DTO
                 .block();
     }
 }
