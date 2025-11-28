@@ -1,59 +1,61 @@
 package com.metamapa.Domain.entities;
 
+import com.metamapa.Domain.dto.input.CategoryDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.Data;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 
+
+@Data
 @Entity
 @DiscriminatorValue("MAXCATEGORIACONHECHOS")
 public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
+    private Integer cantidad;
 
-    private final Map<String, Integer> mapaCategorias = new HashMap<>();
+    public EstadisticaCategoriaMaxima() {
+    }
 
-    @Override
+
     public void actualizarResultado() {
-        mapaCategorias.clear();
-        setResultado(RESULTADO);
 
         ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;
 
-        List<String> categorias;
+        List<CategoryDTO> categorias;
         try {
-            categorias = cliente.obtenerEstadisticaAgregador();
+            categorias = cliente.obtenerCantHechosPorCategoria();
         } catch (Exception ex) {
             return;
         }
-
-        if (categorias == null || categorias.isEmpty()) return;
-
-        for (String c : categorias) {
-            if (c == null) continue;
-            String cat = c.trim();
-            if (cat.isEmpty()) continue;
-            mapaCategorias.merge(cat, 1, Integer::sum);
+        CalcularResultado(categorias);
+    }
+    // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
+    private void CalcularResultado(List<CategoryDTO> categorias) {
+        if (categorias == null || categorias.isEmpty()) {
+            this.setResultado("No hay hechos ");
+            return;
         }
 
-        if (mapaCategorias.isEmpty()) return;
-        Entry<String, Integer> max = Collections.max(mapaCategorias.entrySet(), Comparator.comparingInt(Entry::getValue));
-        setResultado(String.format("%s (%d)", max.getKey(), max.getValue()));
-    }
+        int maxCantidad = 0;
+        String categoriaMax = null;
+        // recorrer y buscar la hora con mayor cantidad
+        for (CategoryDTO categoriaraw : categorias) {
+            if (categoriaraw == null) continue;
 
-    public Map<String, Integer> getMapaCategorias() {
-        return Collections.unmodifiableMap(mapaCategorias);
-    }
+            Long cant = categoriaraw.getCantidad();
+            int cantidadActual = (cant == null) ? 0 : cant.intValue();
 
-    public Optional<Entry<String, Integer>> getCategoriaConMasHechos() {
-        if (mapaCategorias.isEmpty()) return Optional.empty();
-        Entry<String, Integer> max = Collections.max(mapaCategorias.entrySet(), Comparator.comparingInt(Entry::getValue));
-        return Optional.of(max);
+            if (cantidadActual > maxCantidad) {
+                maxCantidad = cantidadActual;
+                //VER ESTO
+                categoriaMax = (categoriaraw.getCategoria() != null) ? categoriaraw.getCategoria() : null ;
+            }
+        }
+
+        this.setResultado(categoriaMax);
+        this.setCantidad(maxCantidad);
     }
 
 }

@@ -3,16 +3,16 @@ package com.metamapa.Domain.entities;
 import com.metamapa.Domain.dto.input.CatHourDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.Data;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Data
 @Entity
 @DiscriminatorValue("MAXHORASEGUNCATEGORIA")
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     private final String categoria;
-    private long cantidad;
+    private Integer cantidad;
 
     public EstadisticaHoraPorCategoria(String categoria) {
         this.categoria = categoria;
@@ -30,36 +30,37 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
 
         List<CatHourDTO> cantidadXHoras;
         try {
-            cantidadXHoras = cliente.obtenerEstadisticaAgregador();
+            cantidadXHoras = cliente.obtenerHechosPorHoraSegun(this.categoria);
         } catch (Exception ex) {
             return;
         }
+        // delegar el cálculo a un método separado
+        CalcularResultado(cantidadXHoras);
+    }
 
-        if (horas == null || horas.isEmpty()) {
+    // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
+    private void CalcularResultado(List<CatHourDTO> cantidadXHoras) {
+        if (cantidadXHoras == null || cantidadXHoras.isEmpty()) {
+            this.setResultado("No hay hechos con la categoria " + this.categoria);
             return;
         }
 
-        // contar cuantas veces aparece cada hora
-        for (String horaRaw : horas) {
-            if (horaRaw == null) continue;
+        int maxCantidad = 0;
+        String horaMaxCategoria = null;
+        // recorrer y buscar la hora con mayor cantidad
+        for (CatHourDTO horaraw : cantidadXHoras) {
+            if (horaraw == null) continue;
 
-            String hora = horaRaw.trim();
-            if (hora.isEmpty()) continue;
+            Long cant = horaraw.getCantidad();
+            int cantidadActual = (cant == null) ? 0 : cant.intValue();
 
-            horaConteo.put(hora, horaConteo.getOrDefault(hora, 0) + 1); //sumo al map (lo agrega antes si no esta)
+            if (cantidadActual > maxCantidad) {
+                maxCantidad = cantidadActual;
+                horaMaxCategoria = (horaraw.getHora() == null) ? null : horaraw.getHora().toString();
+            }
         }
 
-        // construir resultado (opcional: mostrar el conteo)
-        if (!horaConteo.isEmpty()) {
-            setResultado("Conteo de horas para categoría '" + categoria + "': " + horaConteo);
-        }
-    }
-
-    public Map<String, Integer> getHoraConteo() {
-        return horaConteo;
-    }
-
-    public String getCategoria() {
-        return categoria;
+        this.setResultado(horaMaxCategoria);
+        this.setCantidad(maxCantidad);
     }
 }

@@ -16,9 +16,9 @@ public class ExportadorCSV implements IExportador{
     private final EstadisticaProvinciaPorCategoria eppc;
     private final EstadisticaSpamEliminacion ese;
 
-    public ExportadorCSV(Long idColeccion, String categoria) {
+    public ExportadorCSV(String nombreColeccion, String categoria) {
         this.ecm = new EstadisticaCategoriaMaxima();
-        this.ehppc = new EstadisticaMaxHechosPorProvinciaDeUnaColeccion(idColeccion);
+        this.ehppc = new EstadisticaMaxHechosPorProvinciaDeUnaColeccion(nombreColeccion);
         this.ehpc = new EstadisticaHoraPorCategoria(categoria);
         this.eppc = new EstadisticaProvinciaPorCategoria(categoria);
         this.ese = new EstadisticaSpamEliminacion();

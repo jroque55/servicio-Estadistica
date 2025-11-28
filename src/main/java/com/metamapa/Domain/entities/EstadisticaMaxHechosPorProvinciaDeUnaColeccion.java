@@ -1,32 +1,25 @@
 package com.metamapa.Domain.entities;
 
-import com.metamapa.Domain.dto.input.ProvCatDTO;
 import com.metamapa.Domain.dto.input.ProvinceDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.Data;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 
 /**
  * Estadística que obtiene de un ClienteAgregador la lista de provincias de una colección
  * y construye un mapa provincia -> cantidad de hechos. Expone el mapa y la provincia con más hechos.
  */
+@Data
 @Entity
 @DiscriminatorValue("MAXPROVINCIADEUNAPROVINCIA")
 public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEstadistica {
-    private final String coleccion;
-    // mapa provincia -> cantidad de hechos
-    private final Map<String, Integer> mapaProvincias = new HashMap<>();
+    private final String nombreColeccion;
+    private Integer cantidad;
 
-    public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(String idColeccion) {
-        //Siempre me llega la ID bien??
-        this.coleccion = idColeccion;
+    public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(String nombreColeccion) {
+        this.nombreColeccion = nombreColeccion;
     }
 
     public void actualizarResultado() {
@@ -40,36 +33,32 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
 
         List<ProvinceDTO> provincias;
         try {
-            provincias = cliente.obtenerEstadisticaAgregador(this.coleccion, "provincia", null);
+            provincias = cliente.obtenerCantHechosXProvinciaDe(this.nombreColeccion);
         } catch (Exception ex) {
             return;
         }
+        CalcularResultado(provincias);
 
+    }
+        // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
+    private void CalcularResultado(List< ProvinceDTO > provincias) {
         if (provincias == null || provincias.isEmpty()) {
+            this.setResultado("No hay hechos en la coleccion " + this.nombreColeccion);
             return;
         }
-        //Se puede optimizar haciendola un metodo aparte???
-        for (String provRaw : provincias) {
-            if (provRaw == null) continue;
-            String prov = provRaw.trim();
-            if (prov.isEmpty()) continue;
-            mapaProvincias.merge(prov, 1, Integer::sum);
+        int maxCantidad = 0;
+        String provinciaMax = null;
+        // recorrer y buscar la hora con mayor cantidad
+        for (ProvinceDTO provinciaraw : provincias) {
+            if (provinciaraw == null) continue;
+            Long cant = provinciaraw.getCantidad();
+            int cantidadActual = (cant == null) ? 0 : cant.intValue();
+            if (cantidadActual > maxCantidad) {
+                maxCantidad = cantidadActual;
+                provinciaMax = (provinciaraw.getProvincia() == null) ? null : provinciaraw.getProvincia();
+            }
         }
-
-        if (mapaProvincias.isEmpty()) return;
-
-        )));
-    }
-
-    // devuelve el mapa inmutable
-    public Map<String, Integer> getMapaProvincias() {
-        return Collections.unmodifiableMap(mapaProvincias);
-    }
-
-    // devuelve la provincia con más hechos y su cuenta si existe
-    public Optional<Entry<String, Integer>> getProvinciaConMasHechos() {
-        if (mapaProvincias.isEmpty()) return Optional.empty();
-        Entry<String, Integer> max = Collections.max(mapaProvincias.entrySet(), Comparator.comparingInt(Entry::getValue));
-        return Optional.of(max);
+        this.setResultado(provinciaMax);
+        this.setCantidad(maxCantidad);
     }
 }

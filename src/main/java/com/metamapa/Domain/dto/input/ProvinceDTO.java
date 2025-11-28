@@ -1,5 +1,9 @@
 package com.metamapa.Domain.dto.input;
 
-public class ProvinceDTO {
+import lombok.Data;
 
+@Data
+public class ProvinceDTO {
+    private String provincia;
+    private Long cantidad;
 }
