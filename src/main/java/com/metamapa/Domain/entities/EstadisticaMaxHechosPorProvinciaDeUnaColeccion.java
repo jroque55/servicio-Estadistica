@@ -1,5 +1,7 @@
 package com.metamapa.Domain.entities;
 
+import com.metamapa.Domain.dto.input.ProvCatDTO;
+import com.metamapa.Domain.dto.input.ProvinceDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -18,18 +20,16 @@ import java.util.Optional;
 @Entity
 @DiscriminatorValue("MAXPROVINCIADEUNAPROVINCIA")
 public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEstadistica {
-    private final Long idColeccion;
+    private final String coleccion;
     // mapa provincia -> cantidad de hechos
     private final Map<String, Integer> mapaProvincias = new HashMap<>();
 
-    public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(Long idColeccion) {
+    public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(String idColeccion) {
         //Siempre me llega la ID bien??
-        this.idColeccion = idColeccion;
+        this.coleccion = idColeccion;
     }
 
     public void actualizarResultado() {
-        mapaProvincias.clear();
-        setResultado(RESULTADO);
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
 
@@ -38,9 +38,9 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
             return;
         }
 
-        List<String> provincias;
+        List<ProvinceDTO> provincias;
         try {
-            provincias = cliente.obtenerEstadisticaAgregador(idColeccion, "provincia", null);
+            provincias = cliente.obtenerEstadisticaAgregador(this.coleccion, "provincia", null);
         } catch (Exception ex) {
             return;
         }
@@ -58,8 +58,7 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
 
         if (mapaProvincias.isEmpty()) return;
 
-        Entry<String, Integer> maxEntry = Collections.max(mapaProvincias.entrySet(), Comparator.comparingInt(Entry::getValue));
-        setResultado(String.format("%s (%d)", maxEntry.getKey(), maxEntry.getValue()));
+        )));
     }
 
     // devuelve el mapa inmutable

@@ -33,7 +33,7 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
 
         List<ProvCatDTO> datos;
         try {
-            datos = cliente.obtenerEstadisticaAgregador(categoria);
+            datos = cliente.obtenerEstadisticaAgregador(categoria,"provincia");
         } catch (Exception ex) {
             return ;
         }

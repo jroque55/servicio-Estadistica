@@ -37,9 +37,9 @@ public class ClienteAgregador {
                 .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
                 .block();
     }
-    public List<ProvCatDTO> obtenerEstadisticaAgregador(String categoria) {
+    public List<ProvCatDTO> obtenerEstadisticaAgregador(String categoria, String campo) {
         return webClient.get()
-                .uri("/categoria-provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
+                .uri("/estadistica_categoria/provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ProvCatDTO>>() {})
                 .block();

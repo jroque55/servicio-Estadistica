@@ -1,5 +1,6 @@
 package com.metamapa.Domain.entities;
 
+import com.metamapa.Domain.dto.input.CatHourDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -11,16 +12,13 @@ import java.util.Map;
 @DiscriminatorValue("MAXHORASEGUNCATEGORIA")
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     private final String categoria;
-    // mapa hora -> cantidad de hechos
-    private final Map<String, Integer> horaConteo = new HashMap<>();
+    private long cantidad;
 
     public EstadisticaHoraPorCategoria(String categoria) {
         this.categoria = categoria;
     }
 
     public void actualizarResultado() {
-        horaConteo.clear();
-        setResultado(RESULTADO);
 
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
@@ -30,9 +28,9 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
             return;
         }
 
-        List<String> horas;
+        List<CatHourDTO> cantidadXHoras;
         try {
-            horas = cliente.obtenerEstadisticaAgregador("Hora", categoria);
+            cantidadXHoras = cliente.obtenerEstadisticaAgregador();
         } catch (Exception ex) {
             return;
         }
