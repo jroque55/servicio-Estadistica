@@ -22,9 +22,6 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     }
 
     public void actualizarResultado() {
-        //provinciaConteo.clear();
-        //Aca le setea que no tenga, medio raro
-        setResultado(RESULTADO);
 
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
@@ -38,16 +35,18 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         try {
             datos = cliente.obtenerEstadisticaAgregador(categoria);
         } catch (Exception ex) {
-            return;
+            return ;
         }
 
         if (datos == null || datos.isEmpty()) {
+            this.setResultado("No hay hechos con la categoria"+this.categoria);
             return;
         }
 
         int maxCantidad = 0;
         String provinciaMaxCategoria = null;
-
+        //MEJORAR: TODO
+       // datos.stream().max()
         for (ProvCatDTO provinciaRaw : datos) {
             if (provinciaRaw == null) continue;
 

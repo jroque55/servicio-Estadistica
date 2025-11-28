@@ -23,8 +23,6 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
     private Long totalDeSolicitudes;
 
     public void actualizarResultado() {
-      //  mapaSpam.clear();
-        setResultado(RESULTADO);
 
         ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;

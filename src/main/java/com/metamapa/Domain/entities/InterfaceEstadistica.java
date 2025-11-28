@@ -18,7 +18,7 @@ public abstract class InterfaceEstadistica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_estadistica;
     private String resultado;  //Sería el numero
-    private String descripcion; //Sería el nombre de lo que diferecia la estadística
+    //private String descripcion; //Sería el nombre de lo que diferecia la estadística
 
 
     // constante compartida que usan algunas implementaciones //Esto no lo entiendo mucho q digamos
