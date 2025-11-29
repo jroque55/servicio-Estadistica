@@ -5,18 +5,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Data
 @Entity
-@Table(name="estadistica")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo_estadistica", discriminatorType = DiscriminatorType.STRING)
+@Document(collection = "estadisticas")
 @Getter
 @Setter
 public abstract class InterfaceEstadistica {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_estadistica;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id_estadistica;
     private String resultado;  //Sería el numero
     private EnumTipoEstadistica tipoEstadistica;
     private Discriminante discriminante;
