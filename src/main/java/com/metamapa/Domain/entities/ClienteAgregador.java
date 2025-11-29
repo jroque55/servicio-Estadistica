@@ -26,28 +26,28 @@ public class ClienteAgregador {
 
     public List<ProvCatDTO> obtenerCantHechosPorProvinciaSegun(String categoria) {
         return webClient.get()
-                .uri("/estadistica_categoria/provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
+                .uri("/provinciaxcat?cat=" + categoria)//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ProvCatDTO>>() {})
                 .block();
     }
     public List<CatHourDTO> obtenerHechosPorHoraSegun(String categoria) {
         return webClient.get()
-                .uri("/estadistica_categoria/provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
+                .uri("/hora?categoria=" + categoria)//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<CatHourDTO>>() {})
                 .block();
     }
     public List<ProvinceDTO> obtenerCantHechosXProvinciaDe(String nombreColeccion) {
         return webClient.get()
-                .uri("/estadistica_categoria/provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
+                .uri("/provinciaxcol?coleccion=" + nombreColeccion)//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ProvinceDTO>>() {})
                 .block();
     }
     public List<CategoryDTO> obtenerCantHechosPorCategoria() {
         return webClient.get()
-                .uri("/estadistica_categoria/provincia")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
+                .uri("/categoria")//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<CategoryDTO>>() {})
                 .block();
