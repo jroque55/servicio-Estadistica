@@ -2,6 +2,7 @@ package com.metamapa.Service;
 
 import com.metamapa.Domain.dto.EstadisticasDTO;
 import com.metamapa.Domain.entities.ClienteAgregador;
+import com.metamapa.Domain.entities.EstadisticaSpamEliminacion;
 import com.metamapa.Domain.entities.ExportadorCSV;
 import com.metamapa.Domain.entities.InterfaceEstadistica;
 import org.springframework.cache.annotation.CacheEvict;
@@ -9,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToDoubleBiFunction;
 
@@ -16,8 +18,7 @@ import java.util.function.ToDoubleBiFunction;
 public class ServiceEstadistica {
 
     private final ClienteAgregador clienteAgregador;
-    private EstadisticasDTO ultimasEstadisticas;
-    private List<InterfaceEstadistica> estadisticas;
+    private List<InterfaceEstadistica> estadisticas = new ArrayList<>();
     //categoriasVigentes;
     //coleccionesVigentes;
 
@@ -26,11 +27,17 @@ public class ServiceEstadistica {
     }
 
     @Cacheable("estadisticas")
-    public EstadisticasDTO obtenerEstadisticas() {
+    public EstadisticasDTO obtenerEstadistica(long id_estadistica) {
         //VER que onda
-        this.estadisticas =actualizarUltimasEstadisticas();
+        //Reppository de estadistica que traiga segùn el Id
+        //this.estadisticas.add(new EstadisticaSpamEliminacion());
+        //this.estadisticas =actualizarUltimasEstadisticas();
+        return generarEstadisticaDTO();
+           }
 
-        return ultimasEstadisticas;
+    private EstadisticasDTO generarEstadisticaDTO(
+    ) {
+        return  new EstadisticasDTO()
     }
 
     public String generarCSV() {
@@ -53,7 +60,7 @@ public class ServiceEstadistica {
          para poder tener estadisticas actualizadas */
 
         //Logica TODO
-
+        estadisticas.add(new EstadisticaSpamEliminacion());
         this.estadisticas.stream().forEach(a-> a.actualizarResultado());
         return null;//ACÄ debería ir un foreach de todas las estadisticas que se quieran pedir
     }

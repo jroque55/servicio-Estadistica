@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EstadisticasDTO {
-
-    private List<InterfaceEstadistica> estadisticas;  //<<nombreEstadistica, resultadosEstadistica>>
+    private
     public EstadisticasDTO() {}
     public Map<String, String> getEstadisticas() {
         return new HashMap<>();

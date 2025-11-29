@@ -4,10 +4,7 @@ import com.metamapa.Domain.dto.EstadisticasDTO;
 import com.metamapa.Service.ServiceEstadistica;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/estadisticas")
@@ -20,10 +17,12 @@ public class ControllerEstadistica {
     }
 
     //Que pueda recibir una especie de filtro y envie según corresponda
-    @GetMapping("/ver")
-    public ResponseEntity<EstadisticasDTO> verEstadisticas(){
-        EstadisticasDTO estadisticas = serviceEstadistica.obtenerEstadisticas();
-        return ResponseEntity.status(200).body(estadisticas);
+    @GetMapping("")
+    public ResponseEntity<EstadisticasDTO> verEstadisticas(
+            @RequestParam ("id_estadistica") Long id_estadistica
+    ){
+        EstadisticasDTO estadistica = serviceEstadistica.obtenerEstadistica(id_estadistica);
+        return ResponseEntity.status(200).body(estadistica);
     }
 
     @GetMapping(value="/exportar", produces = "text/csv")

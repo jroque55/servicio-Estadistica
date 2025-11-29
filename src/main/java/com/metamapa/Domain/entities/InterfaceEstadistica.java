@@ -18,6 +18,7 @@ public abstract class InterfaceEstadistica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_estadistica;
     private String resultado;  //Sería el numero
+    private EnumTipoEstadistica tipoEstadistica;
     //private String descripcion; //Sería el nombre de lo que diferecia la estadística
 
 
