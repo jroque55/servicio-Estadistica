@@ -61,7 +61,7 @@ public class ServiceEstadistica {
 
         //Logica TODO
         estadisticas.add(new EstadisticaSpamEliminacion());
-        this.estadisticas.stream().forEach(a-> a.actualizarResultado());
+        this.estadisticas.stream().forEach(a-> a.actualizarEstadistica());
         return null;//ACÄ debería ir un foreach de todas las estadisticas que se quieran pedir
     }
 

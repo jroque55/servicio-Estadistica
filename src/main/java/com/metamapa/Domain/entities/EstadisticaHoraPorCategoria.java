@@ -11,16 +11,17 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("MAXHORASEGUNCATEGORIA")
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
-    private final String categoria;
     private Integer cantidad;
+    private List<CatHourDTO> cantidadXHoras;
 
     public EstadisticaHoraPorCategoria(String categoria) {
-        this.categoria = categoria;
+        this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria ));
+
     }
 
-    public void actualizarResultado() {
+    public void actualizarEstadistica() {
 
-        // obtener el singleton ClienteAgregador
+        // obtengo singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
 
         if (cliente == null) {
@@ -28,20 +29,19 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
             return;
         }
 
-        List<CatHourDTO> cantidadXHoras;
         try {
-            cantidadXHoras = cliente.obtenerHechosPorHoraSegun(this.categoria);
+            this.cantidadXHoras = cliente.obtenerHechosPorHoraSegun(this.getDiscriminante().getValor());
         } catch (Exception ex) {
             return;
         }
         // delegar el cálculo a un método separado
-        CalcularResultado(cantidadXHoras);
+        CalcularResultado(this.cantidadXHoras);
     }
 
     // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
     private void CalcularResultado(List<CatHourDTO> cantidadXHoras) {
         if (cantidadXHoras == null || cantidadXHoras.isEmpty()) {
-            this.setResultado("No hay hechos con la categoria " + this.categoria);
+            this.setResultado("No hay hechos con la categoria " + this.getDiscriminante().getValor());
             return;
         }
 

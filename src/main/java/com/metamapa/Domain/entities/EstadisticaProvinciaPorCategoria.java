@@ -12,16 +12,14 @@ import java.util.Map;
 @Entity
 @DiscriminatorValue("MAXPROVINCIASEGUNCONCATEGORIA")
 public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
-    private final String categoria;
     private Integer cantidad;
-    // mapa provincia -> cantidad de hechos
-   // private final Map<String, Integer> provinciaConteo = new HashMap<>();
+    private List<ProvCatDTO> provincias;
 
     public EstadisticaProvinciaPorCategoria(String categoria) {
-        this.categoria = categoria;
+        this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria));
     }
 
-    public void actualizarResultado() {
+    public void actualizarEstadistica() {
 
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
@@ -31,15 +29,15 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
             return;
         }
 
-        List<ProvCatDTO> datos;
+
         try {
-            datos = cliente.obtenerCantHechosPorProvinciaSegun(this.categoria);
+            this.provincias = cliente.obtenerCantHechosPorProvinciaSegun(this.getDiscriminante().getValor());
         } catch (Exception ex) {
             return ;
         }
 
-        if (datos == null || datos.isEmpty()) {
-            this.setResultado("No hay hechos con la categoria"+this.categoria);
+        if (this.provincias == null || this.provincias.isEmpty()) {
+            this.setResultado("No hay hechos con la categoria"+this.getDiscriminante().getValor());
             return;
         }
 
@@ -47,7 +45,7 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         String provinciaMaxCategoria = null;
         //MEJORAR: TODO
        // datos.stream().max()
-        for (ProvCatDTO provinciaRaw : datos) {
+        for (ProvCatDTO provinciaRaw : this.provincias) {
             if (provinciaRaw == null) continue;
 
             int cantidadActual = provinciaRaw.getCantidad().intValue();
@@ -60,19 +58,5 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         this.setResultado(provinciaMaxCategoria);
         this.setCantidad(maxCantidad);
 
-        // construir resultado (opcional: mostrar el conteo)
-//        if (!provinciaConteo.isEmpty()) {
-//            setResultado("Conteo de provincias para categoría '" + categoria + "': " + provinciaConteo);
-//        }
     }
-/*
-    public Map<String, Integer> getProvinciaConteo() {
-        return provinciaConteo;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
- */
 }

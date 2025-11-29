@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/estadisticas")
 public class ControllerEstadistica {
@@ -19,9 +21,12 @@ public class ControllerEstadistica {
     //Que pueda recibir una especie de filtro y envie según corresponda
     @GetMapping("")
     public ResponseEntity<EstadisticasDTO> verEstadisticas(
-            @RequestParam ("id_estadistica") Long id_estadistica
+            @RequestParam (value = "id_estadistica" , required = false) Long id_estadistica
     ){
-        EstadisticasDTO estadistica = serviceEstadistica.obtenerEstadistica(id_estadistica);
+        if(id_estadistica == null){
+            EstadisticasDTO estadistica = serviceEstadistica.obtenerEstadistica(id_estadistica)
+        }
+        List<EstadisticasDTO> estadistica = serviceEstadistica.obtenerEstadistica(id_estadistica);
         return ResponseEntity.status(200).body(estadistica);
     }
 

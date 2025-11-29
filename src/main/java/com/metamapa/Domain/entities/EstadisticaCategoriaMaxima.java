@@ -12,24 +12,26 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("MAXCATEGORIACONHECHOS")
 public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
+    private List<CategoryDTO> categorias;
     private Integer cantidad;
 
+
     public EstadisticaCategoriaMaxima() {
+        this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.SIN,"" ));
     }
 
 
-    public void actualizarResultado() {
+    public void actualizarEstadistica() {
 
         ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;
 
-        List<CategoryDTO> categorias;
         try {
-            categorias = cliente.obtenerCantHechosPorCategoria();
+            this.categorias = cliente.obtenerCantHechosPorCategoria();
         } catch (Exception ex) {
             return;
         }
-        CalcularResultado(categorias);
+        CalcularResultado(this.categorias);
     }
     // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
     private void CalcularResultado(List<CategoryDTO> categorias) {

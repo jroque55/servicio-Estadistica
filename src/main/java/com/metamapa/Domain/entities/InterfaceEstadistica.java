@@ -19,6 +19,7 @@ public abstract class InterfaceEstadistica {
     private long id_estadistica;
     private String resultado;  //Sería el numero
     private EnumTipoEstadistica tipoEstadistica;
+    private Discriminante discriminante;
     //private String descripcion; //Sería el nombre de lo que diferecia la estadística
 
 
@@ -31,5 +32,6 @@ public abstract class InterfaceEstadistica {
     }
 
     // obligar a las subclases a implementar la lógica de actualización
-    public abstract void actualizarResultado();
+    public abstract void actualizarEstadistica();
+
 }

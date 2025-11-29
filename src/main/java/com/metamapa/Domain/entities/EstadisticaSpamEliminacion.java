@@ -21,8 +21,11 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
     @Transient
    // private final Map<String, Integer> mapaSpam = new HashMap<>();
     private Long totalDeSolicitudes;
+    public EstadisticaSpamEliminacion() {
+        this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.SIN,"" ));
+    }
 
-    public void actualizarResultado() {
+    public void actualizarEstadistica() {
 
         ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;

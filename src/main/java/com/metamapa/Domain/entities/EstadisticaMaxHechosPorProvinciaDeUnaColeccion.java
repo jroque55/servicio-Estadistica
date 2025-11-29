@@ -15,14 +15,15 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("MAXPROVINCIADEUNAPROVINCIA")
 public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEstadistica {
-    private final String nombreColeccion;
     private Integer cantidad;
+    private List<ProvinceDTO> provincias;
+
 
     public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(String nombreColeccion) {
-        this.nombreColeccion = nombreColeccion;
+        this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.COLECCION,nombreColeccion));
     }
 
-    public void actualizarResultado() {
+    public void actualizarEstadistica() {
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
 
@@ -31,19 +32,18 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
             return;
         }
 
-        List<ProvinceDTO> provincias;
         try {
-            provincias = cliente.obtenerCantHechosXProvinciaDe(this.nombreColeccion);
+            this.provincias = cliente.obtenerCantHechosXProvinciaDe(this.getDiscriminante().getValor());
         } catch (Exception ex) {
             return;
         }
-        CalcularResultado(provincias);
+        CalcularResultado(this.provincias);
 
     }
         // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
     private void CalcularResultado(List< ProvinceDTO > provincias) {
         if (provincias == null || provincias.isEmpty()) {
-            this.setResultado("No hay hechos en la coleccion " + this.nombreColeccion);
+            this.setResultado("No hay hechos en la coleccion " + this.getDiscriminante().getValor());
             return;
         }
         int maxCantidad = 0;
