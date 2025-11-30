@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 public abstract class InterfaceEstadistica {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id_estadistica;
+    private Long id_estadistica;
     private String resultado;  //Sería el numero
     private EnumTipoEstadistica tipoEstadistica;
     private Discriminante discriminante;

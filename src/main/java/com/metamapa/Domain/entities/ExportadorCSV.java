@@ -1,12 +1,5 @@
 package com.metamapa.Domain.entities;
 
-import com.metamapa.Domain.dto.EstadisticasDTO;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Map;
-import java.util.Optional;
-
 
 public class ExportadorCSV implements IExportador{
 

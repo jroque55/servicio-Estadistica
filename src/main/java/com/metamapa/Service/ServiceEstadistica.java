@@ -1,9 +1,8 @@
 package com.metamapa.Service;
 
-import com.metamapa.Domain.dto.EstadisticasDTO;
+import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import com.metamapa.Domain.entities.ClienteAgregador;
 import com.metamapa.Domain.entities.EstadisticaSpamEliminacion;
-import com.metamapa.Domain.entities.ExportadorCSV;
 import com.metamapa.Domain.entities.InterfaceEstadistica;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.ToDoubleBiFunction;
 
 @Service
 public class ServiceEstadistica {
@@ -27,21 +25,22 @@ public class ServiceEstadistica {
     }
 
     @Cacheable("estadisticas")
-    public EstadisticasDTO obtenerEstadistica(long id_estadistica) {
-        //VER que onda
+    public List<EstadisticaOutputDTO> obtenerEstadisticas(long id_estadistica) {
+        //Primero reviso si hay o no IdESTADISTICA asì solo mando uno
+
+        //Si no deberìa mandarle todas las cosas :D
+
+
         //Reppository de estadistica que traiga segùn el Id
         //this.estadisticas.add(new EstadisticaSpamEliminacion());
         //this.estadisticas =actualizarUltimasEstadisticas();
-        return generarEstadisticaDTO();
+        //return generarEstadisticaOutputDTO();
+        return new ArrayList<>();
            }
 
-    private EstadisticasDTO generarEstadisticaDTO(
-    ) {
-        return  new EstadisticasDTO()
-    }
 
-    public String generarCSV() {
-        EstadisticasDTO dto = obtenerEstadisticas();
+    public String generarCSV(List<InterfaceEstadistica> estadisticas) {
+        //EstadisticaOutputDTO dto = obtenerEstadisticas(estadisticas.get(1).getId_estadistica());
         //ExportadorCSV exp = new ExportadorCSV();
         //return exp.obtenerArchivoTipo(dto);
         return "ewewe";
@@ -65,6 +64,19 @@ public class ServiceEstadistica {
         return null;//ACÄ debería ir un foreach de todas las estadisticas que se quieran pedir
     }
 
+    public void actualizarEstadisticas() {
+        List<String> colecciones ;
+        List<String> provincias ;
+        List<String> categorias ;
+        //La idea es que acà le pida las cosas al agregador, es decir dame todas las colecciones,
+        //TODAS LAS PROVINCIa Y TODAS LAS CACTEGORIAS
+
+        //dps me deberìa fijar si existe o noen la BBDD de las estadisticas, deberìa tener un atributo quesea activa?
+        //Hay otra forma de hacerlo mas rapido?
+
+
+        //Creo las nuevas estdaisticas y las envio en una lista y dps las añado en la lista del controller
+    }
 }
 
 
