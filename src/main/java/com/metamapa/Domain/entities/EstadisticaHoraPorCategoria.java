@@ -4,12 +4,12 @@ import com.metamapa.Domain.dto.input.CatHourDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Data;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
 
 @Data
-@Entity
-@DiscriminatorValue("MAXHORASEGUNCATEGORIA")
+@TypeAlias("estadistica_horaXCategoria")
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     private Integer cantidad;
     private List<CatHourDTO> cantidadXHoras;

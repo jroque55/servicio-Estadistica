@@ -4,6 +4,7 @@ import com.metamapa.Domain.dto.input.ProvinceDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Data;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
 
@@ -12,8 +13,7 @@ import java.util.List;
  * y construye un mapa provincia -> cantidad de hechos. Expone el mapa y la provincia con más hechos.
  */
 @Data
-@Entity
-@DiscriminatorValue("MAXPROVINCIADEUNAPROVINCIA")
+@TypeAlias("estadistica_maxProv")
 public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEstadistica {
     private Integer cantidad;
     private List<ProvinceDTO> provincias;

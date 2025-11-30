@@ -5,6 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 import lombok.Data;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,8 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 @Data
-@Entity
-@DiscriminatorValue("CANTSOLICITUDESSPAM")
+@TypeAlias("estadistica_spam")
 public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
 
     @Transient

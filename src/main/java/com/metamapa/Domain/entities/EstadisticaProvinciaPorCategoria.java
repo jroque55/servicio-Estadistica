@@ -5,12 +5,12 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
 import java.util.Map;
 @Data
-@Entity
-@DiscriminatorValue("MAXPROVINCIASEGUNCONCATEGORIA")
+@TypeAlias("estadistica_maxProvCat")
 public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     private Integer cantidad;
     private List<ProvCatDTO> provincias;

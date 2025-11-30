@@ -4,13 +4,13 @@ import com.metamapa.Domain.dto.input.CategoryDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Data;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
 
 
 @Data
-@Entity
-@DiscriminatorValue("MAXCATEGORIACONHECHOS")
+@TypeAlias("estadistica_catMax")
 public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
     private List<CategoryDTO> categorias;
     private Integer cantidad;
