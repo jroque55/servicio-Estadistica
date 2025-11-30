@@ -68,6 +68,10 @@ public class ServiceEstadistica {
         List<String> colecciones ;
         List<String> provincias ;
         List<String> categorias ;
+
+        colecciones=this.clienteAgregador.obtenerColecciones();
+        provincias = this.clienteAgregador.obtenerProvincias();
+        categorias = this.clienteAgregador.obtenerCategorias();
         //La idea es que acà le pida las cosas al agregador, es decir dame todas las colecciones,
         //TODAS LAS PROVINCIa Y TODAS LAS CACTEGORIAS
 

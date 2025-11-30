@@ -60,4 +60,28 @@ public class ClienteAgregador {
                 .bodyToMono(SpamSummaryDTO.class) // mapea directo al DTO
                 .block();
     }
+
+    public List<String> obtenerColecciones() {
+        return webClient.get()
+                .uri("/colecciones/nombre")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .block();
+    }
+
+    public List<String> obtenerProvincias() {
+        return webClient.get()
+                .uri("/provincias/nombre")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .block();
+    }
+
+    public List<String> obtenerCategorias() {
+        return webClient.get()
+                .uri("/categorias/nombre")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .block();
+    }
 }
