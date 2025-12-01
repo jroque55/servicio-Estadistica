@@ -68,13 +68,12 @@ public class ServiceEstadistica {
 
     public void actualizarEstadisticas() {
         List<String> colecciones ;
-        List<String> provincias ;
         List<String> categorias ;
 
         colecciones=this.clienteAgregador.obtenerColecciones();
-        provincias = this.clienteAgregador.obtenerProvincias();
         categorias = this.clienteAgregador.obtenerCategorias();
 
+        //MEJORA
         if(estadisticas==null){
             //crearEstdisticas
             //crea estadistica relacionada a la coleccion
@@ -106,8 +105,12 @@ public class ServiceEstadistica {
 
             this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
             this.repo.saveAll(this.estadisticas);
+            return;
 
         }
+        this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
+        this.repo.saveAll(this.estadisticas);
+
 
         //La idea es que acà le pida las cosas al agregador, es decir dame todas las colecciones,
         //TODAS LAS PROVINCIa Y TODAS LAS CACTEGORIAS

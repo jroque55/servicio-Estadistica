@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Data
-@Entity
 @Document(collection = "estadisticas")
 @Getter
 @Setter

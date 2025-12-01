@@ -3,6 +3,7 @@ package com.metamapa.Domain.entities;
 import com.metamapa.Domain.dto.input.CatHourDTO;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import static com.metamapa.Domain.entities.EnumTipoEstadistica.MAXHORASEGUNCATEG
 
 
 @Data
+@Document(collection = "estadisticas")
 @TypeAlias("estadistica_horaXCategoria")
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     private Integer cantidad;

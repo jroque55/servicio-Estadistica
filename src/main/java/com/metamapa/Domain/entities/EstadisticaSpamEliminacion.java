@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 @Data
+@Document(collection = "estadisticas")
 @TypeAlias("estadistica_spam")
 public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
 

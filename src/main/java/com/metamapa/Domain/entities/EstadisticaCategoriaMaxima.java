@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import jdk.jshell.spi.ExecutionEnv;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 
 @Data
+@Document(collection = "estadisticas")
 @TypeAlias("estadistica_catMax")
 public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
     private List<CategoryDTO> categorias;
