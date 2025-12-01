@@ -17,6 +17,7 @@ import java.util.List;
 public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
     private List<CategoryDTO> categorias;
     private Integer cantidad;
+    private CategoryDTO resultado;
 
 
     public EstadisticaCategoriaMaxima() {

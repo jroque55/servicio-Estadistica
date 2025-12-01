@@ -19,6 +19,7 @@ import java.util.List;
 public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEstadistica {
     private Integer cantidad;
     private List<ProvinceDTO> provincias;
+    private ProvinceDTO resultado;
 
 
     public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(String nombreColeccion) {

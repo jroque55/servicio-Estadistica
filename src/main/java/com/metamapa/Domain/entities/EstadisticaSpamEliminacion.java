@@ -19,6 +19,8 @@ import java.util.Optional;
 @Document(collection = "estadisticas")
 @TypeAlias("estadistica_spam")
 public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
+    private Long resultado;
+    private Long cantidadTotal;
 
     @Transient
    // private final Map<String, Integer> mapaSpam = new HashMap<>();
@@ -28,7 +30,7 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
         this.setTipoEstadistica(EnumTipoEstadistica.CANTSOLICITUDESSPAM);
     }
 
-    public void actualizarEstadistica() {
+    public void actualizarResultado() {
 
         ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;
@@ -42,9 +44,9 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
         }
 
         if (spam == null ) return;
+        this.resultado= spam.getCantSpam();
+        this.cantidadTotal = spam.getCantSolicitudes();
 
-        this.setResultado(spam.getCantSpam().toString());
-        this.setTotalDeSolicitudes(spam.getCantSolicitudes());
 
     }
 

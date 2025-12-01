@@ -22,17 +22,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "10m")
 public class SchedulerConfig {
-
-    // 💡 Replace "your-database-name" with the actual name of your MongoDB database
-    private static final String DATABASE_NAME = "your-database-name";
-
+    //MEJORAR ver esto bien dps el casteo hace falta?
     @Bean
     public LockProvider lockProvider(MongoClient mongoClient) {
-        // 1. Get the specific MongoDatabase instance from the MongoClient
-        MongoDatabase mongoDatabase = mongoClient.getDatabase(DATABASE_NAME);
-
-        // 2. Pass the MongoDatabase to the MongoLockProvider constructor
-        return new MongoLockProvider(mongoDatabase);
+        return new MongoLockProvider((MongoDatabase) mongoClient);
     }
 }
-

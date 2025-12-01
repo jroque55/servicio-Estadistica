@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Data
 @Document(collection = "estadisticas")
@@ -17,7 +16,6 @@ public abstract class InterfaceEstadistica {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_estadistica;
-    private String resultado;  //Sería el numero
     private EnumTipoEstadistica tipoEstadistica;
     private Discriminante discriminante;
     //private String descripcion; //Sería el nombre de lo que diferecia la estadística
@@ -31,6 +29,8 @@ public abstract class InterfaceEstadistica {
         return ClienteAgregador.getInstance();
     }
 
+    //Actualiza el Resultado
+    public abstract void actualizarResultado();
     // obligar a las subclases a implementar la lógica de actualización
     public abstract void actualizarEstadistica();
 

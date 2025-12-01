@@ -30,7 +30,7 @@ public class ControllerEstadistica {
         if(ultimaActualizacion.compareTo(LocalDateTime.now()) > 5 ){
             this.serviceEstadistica.actualizarEstadisticas();
         }
-        List<EstadisticaOutputDTO> estadistica = serviceEstadistica.obtenerEstadisticas(id_estadistica);
+        List<EstadisticaOutputDTO> estadistica = serviceEstadistica.obtenerResultadosDeEstadisticas(id_estadistica);
         return ResponseEntity.status(200).body(estadistica);
     }
 

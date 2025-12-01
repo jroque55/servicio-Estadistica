@@ -19,26 +19,38 @@ public class ServiceEstadistica {
     private final ClienteAgregador clienteAgregador;
     private List<InterfaceEstadistica> estadisticas = new ArrayList<>();
     private IRepositoryEstadisticas repo ;
-    //categoriasVigentes;
-    //coleccionesVigentes;
 
-    public ServiceEstadistica(ClienteAgregador cliente){
+
+    public ServiceEstadistica(ClienteAgregador cliente,IRepositoryEstadisticas repo){
         this.clienteAgregador = cliente;
+        this.repo = repo;
     }
+    public void actualizarTodas() {
+        List<InterfaceEstadistica> estadisticas = repo.findAll();
 
+        for (InterfaceEstadistica est : estadisticas) {
+            est.actualizarResultado();        // llama al método propio de la clase
+            repo.save(est);                   // guarda el nuevo resultado
+        }
+
+        System.out.println("Estadísticas actualizadas y persistidas");
+    }
     @Cacheable("estadisticas")
-    public List<EstadisticaOutputDTO> obtenerEstadisticas(long id_estadistica) {
+    public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(long id_estadistica) {
         //Primero reviso si hay o no IdESTADISTICA asì solo mando uno
 
         //Si no deberìa mandarle todas las cosas :D
-
-
-        //Reppository de estadistica que traiga segùn el Id
-        //this.estadisticas.add(new EstadisticaSpamEliminacion());
-        //this.estadisticas =actualizarUltimasEstadisticas();
-        //return generarEstadisticaOutputDTO();
-        return new ArrayList<>();
+        return generarEstadisticaOutputDTO(repo.findAll());
            }
+
+    private List<EstadisticaOutputDTO> generarEstadisticaOutputDTO(List<InterfaceEstadistica> estadisticas) {
+        List<EstadisticaOutputDTO> estadisticasDTO = new ArrayList<>();
+        estadisticas.forEach(estadistica -> {
+            estadisticasDTO.add(new EstadisticaOutputDTO(estadistica));
+        });
+        return estadisticasDTO;
+
+    }
 
 
     public String generarCSV(List<InterfaceEstadistica> estadisticas) {

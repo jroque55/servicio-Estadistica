@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class DatoDTO {
-    private String nombre;
+    private String nombre; // 13:00
     private Long cantidad;
 
     public DatoDTO() {

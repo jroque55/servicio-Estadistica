@@ -16,6 +16,7 @@ import java.util.Map;
 public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     private Integer cantidad;
     private List<ProvCatDTO> provincias;
+    private ProvCatDTO resultado;
 
     public EstadisticaProvinciaPorCategoria(String categoria) {
 

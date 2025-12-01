@@ -16,6 +16,7 @@ import static com.metamapa.Domain.entities.EnumTipoEstadistica.MAXHORASEGUNCATEG
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     private Integer cantidad;
     private List<CatHourDTO> cantidadXHoras;
+    private CatHourDTO resultado;
 
     public EstadisticaHoraPorCategoria(String categoria) {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria ));
