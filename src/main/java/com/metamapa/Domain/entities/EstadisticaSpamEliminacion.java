@@ -23,6 +23,7 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
     private Long totalDeSolicitudes;
     public EstadisticaSpamEliminacion() {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.SIN,"" ));
+        this.setTipoEstadistica(EnumTipoEstadistica.CANTSOLICITUDESSPAM);
     }
 
     public void actualizarEstadistica() {
@@ -42,7 +43,10 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
 
         this.setResultado(spam.getCantSpam().toString());
         this.setTotalDeSolicitudes(spam.getCantSolicitudes());
+
     }
+
+
 /*--------------------------------No se si irian---------------------------------------------------
     public Map<String, Integer> getMapaSpam() {
         return Collections.unmodifiableMap(mapaSpam);

@@ -16,7 +16,9 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     private List<ProvCatDTO> provincias;
 
     public EstadisticaProvinciaPorCategoria(String categoria) {
+
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria));
+        this.setTipoEstadistica(EnumTipoEstadistica.MAXPROVINCIASEGUNCONCATEGORIA);
     }
 
     public void actualizarEstadistica() {

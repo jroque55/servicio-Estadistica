@@ -21,6 +21,7 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
 
     public EstadisticaMaxHechosPorProvinciaDeUnaColeccion(String nombreColeccion) {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.COLECCION,nombreColeccion));
+        this.setTipoEstadistica(EnumTipoEstadistica.MAXPROVINCIADEUNACOLECCION);
     }
 
     public void actualizarEstadistica() {

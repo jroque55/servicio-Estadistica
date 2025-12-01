@@ -1,12 +1,13 @@
 package com.metamapa.Domain.entities;
 
 import com.metamapa.Domain.dto.input.CatHourDTO;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
+
+import static com.metamapa.Domain.entities.EnumTipoEstadistica.MAXHORASEGUNCATEGORIA;
+
 
 @Data
 @TypeAlias("estadistica_horaXCategoria")
@@ -16,6 +17,7 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
 
     public EstadisticaHoraPorCategoria(String categoria) {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria ));
+        this.setTipoEstadistica(MAXHORASEGUNCATEGORIA);
 
     }
 

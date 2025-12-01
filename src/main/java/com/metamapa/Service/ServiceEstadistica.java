@@ -1,9 +1,9 @@
 package com.metamapa.Service;
 
 import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
-import com.metamapa.Domain.entities.ClienteAgregador;
-import com.metamapa.Domain.entities.EstadisticaSpamEliminacion;
-import com.metamapa.Domain.entities.InterfaceEstadistica;
+import com.metamapa.Domain.entities.*;
+import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,8 +15,10 @@ import java.util.List;
 @Service
 public class ServiceEstadistica {
 
+    @Autowired
     private final ClienteAgregador clienteAgregador;
     private List<InterfaceEstadistica> estadisticas = new ArrayList<>();
+    private IRepositoryEstadisticas repo ;
     //categoriasVigentes;
     //coleccionesVigentes;
 
@@ -72,6 +74,41 @@ public class ServiceEstadistica {
         colecciones=this.clienteAgregador.obtenerColecciones();
         provincias = this.clienteAgregador.obtenerProvincias();
         categorias = this.clienteAgregador.obtenerCategorias();
+
+        if(estadisticas==null){
+            //crearEstdisticas
+            //crea estadistica relacionada a la coleccion
+            for(String coleccion : colecciones){
+                if(coleccion!=null) {
+                    InterfaceEstadistica estadistica = this.crearEstadisticaColeccion(coleccion);
+                    this.estadisticas.add(estadistica);
+                }
+            }
+            //crea estdistica relacionada con categoria
+            EstadisticaCategoriaMaxima estadisticaMaxCategori =new EstadisticaCategoriaMaxima();
+
+            for(String categoria: categorias){
+                if(categoria!=null){
+
+                    //Estadistica hora  por categoria
+                    InterfaceEstadistica estadistica = this.crearEstadicaHoraPorCategoria(categoria);
+                    this.estadisticas.add(estadistica);
+                    //Estadistica provincia por categoria
+                    InterfaceEstadistica estadistica1=this.crearEstadiscaProvinciaPorCategoria(categoria);
+                    this.estadisticas.add(estadistica1);
+                }
+            }
+
+            // Estadistica Spam
+            EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
+
+            //Ejecutamos para agregar informacion a todas las estadisticas , y luego persistimos
+
+            this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
+            this.repo.saveAll(this.estadisticas);
+
+        }
+
         //La idea es que acà le pida las cosas al agregador, es decir dame todas las colecciones,
         //TODAS LAS PROVINCIa Y TODAS LAS CACTEGORIAS
 
@@ -81,6 +118,21 @@ public class ServiceEstadistica {
 
         //Creo las nuevas estdaisticas y las envio en una lista y dps las añado en la lista del controller
     }
+
+    private InterfaceEstadistica crearEstadiscaProvinciaPorCategoria(String categoria) {
+        return new EstadisticaProvinciaPorCategoria(categoria);
+    }
+
+    private InterfaceEstadistica crearEstadicaHoraPorCategoria(String categoria) {
+        return new EstadisticaHoraPorCategoria(categoria);
+    }
+
+    public InterfaceEstadistica crearEstadisticaColeccion(String coleccion){
+
+       return new EstadisticaMaxHechosPorProvinciaDeUnaColeccion(coleccion);
+
+    }
+
 }
 
 

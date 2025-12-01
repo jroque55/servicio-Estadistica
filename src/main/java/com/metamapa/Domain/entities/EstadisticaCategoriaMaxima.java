@@ -3,6 +3,7 @@ package com.metamapa.Domain.entities;
 import com.metamapa.Domain.dto.input.CategoryDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jdk.jshell.spi.ExecutionEnv;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 
@@ -18,6 +19,7 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
 
     public EstadisticaCategoriaMaxima() {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.SIN,"" ));
+        this.setTipoEstadistica(EnumTipoEstadistica.MAXCATEGORIACONHECHOS);
     }
 
 
