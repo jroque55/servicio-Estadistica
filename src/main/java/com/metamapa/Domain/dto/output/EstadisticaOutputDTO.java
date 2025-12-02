@@ -24,9 +24,6 @@ public class EstadisticaOutputDTO {
 
     //MEJORAR FACTORY
     public EstadisticaOutputDTO(InterfaceEstadistica estadistica) {
-        switch (estadistica.getTipoEstadistica()){
-            case CANTSOLICITUDESSPAM -> new EstadisticaOutputDTO(estadistica);
-        }
 
     }
 

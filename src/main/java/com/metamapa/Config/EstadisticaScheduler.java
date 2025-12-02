@@ -2,12 +2,13 @@ package com.metamapa.Config;
 
 import com.metamapa.Service.ServiceEstadistica;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EstadisticaScheduler {
-
+    @Autowired
     private final ServiceEstadistica service;
 
     public EstadisticaScheduler(ServiceEstadistica service) {

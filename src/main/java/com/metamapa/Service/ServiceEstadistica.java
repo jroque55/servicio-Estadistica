@@ -1,6 +1,7 @@
 package com.metamapa.Service;
 
 import com.metamapa.Config.EstadisticaUpdateMarker;
+import com.metamapa.Domain.FactoryEstadisticaDTO;
 import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import com.metamapa.Domain.entities.*;
 import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
@@ -27,15 +28,17 @@ public class ServiceEstadistica {
     private IExportador exportador;
     private RepositoryEstadisticaUpdate repoUpdate;
     private LocalDateTime ultimoUpdateLocal;
+    private FactoryEstadisticaDTO factoryEstadistica;
 
 
-    public ServiceEstadistica(ClienteAgregador cliente,IRepositoryEstadisticas repo, RepositoryEstadisticaUpdate repoUpdate, LocalDateTime ultimoUpdateLocal,ExportadorCSV exportador) {
+    public ServiceEstadistica(ClienteAgregador cliente,IRepositoryEstadisticas repo, RepositoryEstadisticaUpdate repoUpdate,IExportador exportador,FactoryEstadisticaDTO factory) {
         this.clienteAgregador = cliente;
         this.repo = repo;
         this.repoUpdate = repoUpdate;
         //Ver si este va
-        this.ultimoUpdateLocal = ultimoUpdateLocal;
         this.exportador= exportador;
+        this.factoryEstadistica = factory;
+        //this.ultimoUpdateLocal= repoUpdate.findById("singleton").orElse(null).getLastUpdate();
 
     }
     public void actualizarResultadosEstadisticas() {
@@ -55,12 +58,13 @@ public class ServiceEstadistica {
     //x ahí es mejor que ya los tenga calculados
     @Cacheable("estadisticas")
     //DEBRIA SER UNA LISTA -- DEBERIA CONSIDEREARSE A CAMBIARSE A SOLO EatdisticaOutputDTO
-    public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(long id_estadistica) {
+    public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(String id_estadistica) {
         //MEJORAR
         //esto es por si no hay id_estadistica
-        if(id_estadistica!=0){
-            InterfaceEstadistica estadistica= repo.findById(Long.toString(id_estadistica)).orElse(null);
-            EstadisticaOutputDTO estadisticaOutputDTO = new EstadisticaOutputDTO(estadistica);
+        if(id_estadistica!=null){
+            InterfaceEstadistica estadistica= repo.findById(id_estadistica).orElse(null);
+            if(estadistica==null) return null;
+            EstadisticaOutputDTO estadisticaOutputDTO = this.factoryEstadistica.crearEstadisticaDTO(estadistica);
             List<EstadisticaOutputDTO> estadisticaOutputDTOs = new ArrayList<>();
             estadisticaOutputDTOs.add(estadisticaOutputDTO);
             return estadisticaOutputDTOs;
@@ -81,7 +85,7 @@ public class ServiceEstadistica {
     public String generarCSV(List<InterfaceEstadistica> estadisticas) {
         //MEJORA
         //En aqui se utiliza solo una estadistica , ver como hacer
-        List<EstadisticaOutputDTO> dto = obtenerResultadosDeEstadisticas(Long.parseLong(estadisticas.get(1).getId()));
+        List<EstadisticaOutputDTO> dto = obtenerResultadosDeEstadisticas(estadisticas.get(1).getId());
         String estadisticaCSV ="";
        //String estadisticaCSV= this.exportador.exportar(dto);
 

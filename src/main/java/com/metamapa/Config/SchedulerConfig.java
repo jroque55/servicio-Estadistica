@@ -6,6 +6,7 @@ import net.javacrumbs.shedlock.provider.mongo.MongoLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.mongodb.client.MongoDatabase;
