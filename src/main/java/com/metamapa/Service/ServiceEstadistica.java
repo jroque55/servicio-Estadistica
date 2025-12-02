@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceEstadistica {
@@ -39,11 +40,19 @@ public class ServiceEstadistica {
     }
     @Cacheable("estadisticas")
     public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(long id_estadistica) {
-        if(id_estadistica==0){
-            return new EstadisticaOutputDTO(repo.findById(Long.toString(id_estadistica)));}
-        return generarEstadisticaOutputDTO(repo.findAll());
-           }
+        if (id_estadistica == 0) {
+            //NO ENTIENDO POR QUE SE REALIZA ESTO
+            //return  null ;}
+            Optional<InterfaceEstadistica> estadistica = this.repo.findById(Long.toString(id_estadistica));
+            if (estadistica.isPresent()) {
+                InterfaceEstadistica e = estadistica.get();
+                //esta bien esto pero deberia ser una lista no entiendo esto --yeri
+                //return new EstadisticaOutputDTO(e);
+            }
 
+        }
+        return generarEstadisticaOutputDTO(repo.findAll());
+    }
     private List<EstadisticaOutputDTO> generarEstadisticaOutputDTO(List<InterfaceEstadistica> estadisticas) {
         List<EstadisticaOutputDTO> estadisticasDTO = new ArrayList<>();
         estadisticas.forEach(estadistica -> {

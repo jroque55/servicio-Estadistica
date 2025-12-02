@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @EnableScheduling
@@ -32,6 +33,12 @@ public class EstadisticasApplication {
         repo.save(est);
 
         System.out.println("Guardada OK en Mongo");
+
+        Optional<InterfaceEstadistica> estadistica = repo.findById("692edc046a5cfa2bff372537");
+        InterfaceEstadistica esta= estadistica.get();
+        EstadisticaCategoriaMaxima cat = (EstadisticaCategoriaMaxima) esta;
+        System.out.println(cat.getTipoEstadistica());
+        System.out.println(cat.getResultado());
 
 
     }

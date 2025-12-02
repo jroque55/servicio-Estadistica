@@ -25,6 +25,7 @@ public class SchedulerConfig {
     //MEJORAR ver esto bien dps el casteo hace falta?
     @Bean
     public LockProvider lockProvider(MongoClient mongoClient) {
-        return new MongoLockProvider((MongoDatabase) mongoClient);
+        MongoDatabase database = mongoClient.getDatabase("estadisticas");
+        return new MongoLockProvider(database);
     }
 }
