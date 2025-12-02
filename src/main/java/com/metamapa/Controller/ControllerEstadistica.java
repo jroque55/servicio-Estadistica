@@ -15,21 +15,17 @@ import java.util.List;
 public class ControllerEstadistica {
     private List<InterfaceEstadistica> estadisticas;
     private final ServiceEstadistica serviceEstadistica;
-    private LocalDateTime ultimaActualizacion;
 
     public ControllerEstadistica(ServiceEstadistica service) {
         this.serviceEstadistica = service;
     }
 
     //Que pueda recibir una especie de filtro y envie según corresponda
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<EstadisticaOutputDTO>> verEstadisticas(
             @RequestParam (value = "id_estadistica" , required = false) Long id_estadistica
     ){
-        //Deberìan ser 5 o 10 min, no sè si ese 5 son 5 min jaja para, la ultima actualizacion deberìa traerse o rtern persistida en una BBDD
-        if(ultimaActualizacion.compareTo(LocalDateTime.now()) > 5 ){
-            this.serviceEstadistica.actualizarEstadisticas();
-        }
+        //Decir que id_estadistica sea !=0
         List<EstadisticaOutputDTO> estadistica = serviceEstadistica.obtenerResultadosDeEstadisticas(id_estadistica);
         return ResponseEntity.status(200).body(estadistica);
     }

@@ -15,9 +15,14 @@ public class EstadisticaScheduler {
     }
 
     @Scheduled(fixedDelay = 300_000) // cada 5 minutos
-    @SchedulerLock(name = "actualizarResultadosEstadisticas", lockAtMostFor = "10m", lockAtLeastFor = "1m")
-    public void actualizarResultadosEstadisticas() {
+    @SchedulerLock(name = "actualizarResultados", lockAtMostFor = "10m", lockAtLeastFor = "1m")
+    public void actualizarResultados() {
         service.actualizarResultadosEstadisticas();
+    }
+    @Scheduled(cron = "0 0 2 * * *") // todos los días 02:00 AM
+    @SchedulerLock(name = "actualizarEstadisticasDiarias", lockAtLeastFor = "5m", lockAtMostFor = "10m")
+    public void actualizarEstadisticas() {
+        service.actualizarEstadisticas();
     }
 }
 

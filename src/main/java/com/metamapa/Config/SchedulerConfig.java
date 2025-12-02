@@ -8,15 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.mongodb.client.MongoClient;
-// Import for MongoDatabase
 import com.mongodb.client.MongoDatabase;
-import net.javacrumbs.shedlock.core.LockProvider;
-import net.javacrumbs.shedlock.provider.mongo.MongoLockProvider;
-import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+
 
 @Configuration
 @EnableScheduling
@@ -24,8 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class SchedulerConfig {
     //MEJORAR ver esto bien dps el casteo hace falta?
     @Bean
-    public LockProvider lockProvider(MongoClient mongoClient) {
-        MongoDatabase database = mongoClient.getDatabase("estadisticas");
-        return new MongoLockProvider(database);
+    public LockProvider lockProvider(MongoTemplate mongoTemplate) {
+        MongoDatabase db = mongoTemplate.getDb();
+        return new MongoLockProvider(db);
     }
 }
