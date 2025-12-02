@@ -1,7 +1,6 @@
 package com.metamapa.Domain.entities;
 
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +30,4 @@ public abstract class InterfaceEstadistica {
 
     //Actualiza el Resultado
     public abstract void actualizarResultado();
-    // obligar a las subclases a implementar la lógica de actualización
-    public abstract void actualizarEstadistica();
-
 }

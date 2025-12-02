@@ -25,10 +25,12 @@ public class ServiceEstadistica {
         this.clienteAgregador = cliente;
         this.repo = repo;
     }
-    public void actualizarTodas() {
-        List<InterfaceEstadistica> estadisticas = repo.findAll();
+    public void actualizarResultadosEstadisticas() {
+        if(this.estadisticas.isEmpty()){
+            this.estadisticas = repo.findAll();
+        }
 
-        for (InterfaceEstadistica est : estadisticas) {
+        for (InterfaceEstadistica est : this.estadisticas) {
             est.actualizarResultado();        // llama al método propio de la clase
             repo.save(est);                   // guarda el nuevo resultado
         }
@@ -37,9 +39,8 @@ public class ServiceEstadistica {
     }
     @Cacheable("estadisticas")
     public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(long id_estadistica) {
-        //Primero reviso si hay o no IdESTADISTICA asì solo mando uno
-
-        //Si no deberìa mandarle todas las cosas :D
+        if(id_estadistica==0){
+            return new EstadisticaOutputDTO(repo.findById(Long.toString(id_estadistica)));}
         return generarEstadisticaOutputDTO(repo.findAll());
            }
 
@@ -58,24 +59,6 @@ public class ServiceEstadistica {
         //ExportadorCSV exp = new ExportadorCSV();
         //return exp.obtenerArchivoTipo(dto);
         return "ewewe";
-    }
-
-    @Scheduled(fixedRate = 300000) // cada 5 minutos
-    @CacheEvict(value = "estadisticas", allEntries = true)
-    public List<InterfaceEstadistica> actualizarUltimasEstadisticas(){
-        //obtenerCategorias
-        //obtenerColecciones
-
-        if(estadisticas==null){
-            //crearEstdisticas
-        }
-        /*implementar logica si agregan o eliminan categorias o coleciones
-         para poder tener estadisticas actualizadas */
-
-        //Logica TODO
-        estadisticas.add(new EstadisticaSpamEliminacion());
-        this.estadisticas.stream().forEach(a-> a.actualizarEstadistica());
-        return null;//ACÄ debería ir un foreach de todas las estadisticas que se quieran pedir
     }
 
     public void actualizarEstadisticas() {
@@ -111,17 +94,17 @@ public class ServiceEstadistica {
             }
 
             // Estadistica Spam
-            EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
+            //EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
 
             //Ejecutamos para agregar informacion a todas las estadisticas , y luego persistimos
 
-            this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
-            this.repo.saveAll(this.estadisticas);
+            //this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
+            //this.repo.saveAll(this.estadisticas);
             return;
 
         }
-        this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
-        this.repo.saveAll(this.estadisticas);
+        //this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
+        //.repo.saveAll(this.estadisticas);
 
 
         //La idea es que acà le pida las cosas al agregador, es decir dame todas las colecciones,
