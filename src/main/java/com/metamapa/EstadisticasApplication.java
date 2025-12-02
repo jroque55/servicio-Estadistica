@@ -10,7 +10,6 @@ import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 import java.util.List;
 import java.util.Optional;

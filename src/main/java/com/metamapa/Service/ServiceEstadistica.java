@@ -21,7 +21,6 @@ import java.util.Optional;
 @Service
 public class ServiceEstadistica {
 
-    @Autowired
     private final ClienteAgregador clienteAgregador;
     private List<InterfaceEstadistica> estadisticas = new ArrayList<>();
     private IRepositoryEstadisticas repo ;
@@ -41,7 +40,7 @@ public class ServiceEstadistica {
         //this.ultimoUpdateLocal= repoUpdate.findById("singleton").orElse(null).getLastUpdate();
 
     }
-    public void actualizarResultadosEstadisticas() {
+    public synchronized void actualizarResultadosEstadisticas() {
         if(this.estadisticas.isEmpty()){
             this.estadisticas = repo.findAll();
         }
@@ -50,38 +49,41 @@ public class ServiceEstadistica {
             est.actualizarResultado();        // llama al método propio de la clase
             repo.save(est);                   // guarda el nuevo resultado
         }
-
+        this.ultimoUpdateLocal = LocalDateTime.now();
         System.out.println("Estadísticas actualizadas y persistidas");
     }
 
     //Debería tener una lista o está bien que los vaya a buscar siempre?
     //x ahí es mejor que ya los tenga calculados
-    @Cacheable("estadisticas")
+    @CacheEvict(value="estadisticas", allEntries = true)
     //DEBRIA SER UNA LISTA -- DEBERIA CONSIDEREARSE A CAMBIARSE A SOLO EatdisticaOutputDTO
     public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas() {
         //MEJORAR
-        return this.factoryEstadistica.crearListaEstadisticaDTO(repo.findAll());
+        return this.factoryEstadistica.crearListaEstadisticaDTO(obtener());
     }
 
 
     public EstadisticaOutputDTO obtenerResultadoPorID(String idEstadistica) {
-        InterfaceEstadistica estadisticaBD = repo.findById(idEstadistica).orElse(null);
-        if (estadisticaBD == null) { return null; }
-        EstadisticaOutputDTO estadistica = this.factoryEstadistica.crearEstadisticaDTO(estadisticaBD);
-        return estadistica;
+
+        InterfaceEstadistica est = obtener().stream()
+                .filter(e -> e.getId().equals(idEstadistica))
+                .findFirst()
+                .orElse(null);
+
+        return est == null ? null : factoryEstadistica.crearEstadisticaDTO(est);
     }
 
     public String generarCSV(List<InterfaceEstadistica> estadisticas) {
         //MEJORA
         //En aqui se utiliza solo una estadistica , ver como hacer
-        List<EstadisticaOutputDTO> dto = obtenerResultadosDeEstadisticas(estadisticas.get(1).getId());
+        List<EstadisticaOutputDTO> dto = obtenerResultadosDeEstadisticas(); //TRAE TODOS
         String estadisticaCSV ="";
        //String estadisticaCSV= this.exportador.exportar(dto);
 
         return estadisticaCSV;
     }
 
-    public void actualizarEstadisticas() {
+    public synchronized void actualizarEstadisticas() {
         List<String> colecciones = this.clienteAgregador.obtenerColecciones();
         List<String> categorias = this.clienteAgregador.obtenerCategorias();
         this.estadisticas = new ArrayList<>();
@@ -105,12 +107,7 @@ public class ServiceEstadistica {
                 InterfaceEstadistica estadistica1=this.crearEstadiscaProvinciaPorCategoria(categoria);
                 this.estadisticas.add(estadistica1);
             }
-            repo.saveAll(this.estadisticas);
-            EstadisticaUpdateMarker marker = new EstadisticaUpdateMarker();
-            marker.setLastUpdate(LocalDateTime.now());
-            repoUpdate.save(marker);
 
-            this.ultimoUpdateLocal = marker.getLastUpdate();
 
             // Estadistica Spam
             //EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
@@ -121,6 +118,12 @@ public class ServiceEstadistica {
             //this.repo.saveAll(this.estadisticas)
 
         }
+        repo.saveAll(this.estadisticas);
+        EstadisticaUpdateMarker marker = new EstadisticaUpdateMarker();
+        marker.setLastUpdate(LocalDateTime.now());
+        repoUpdate.save(marker);
+
+        this.ultimoUpdateLocal = marker.getLastUpdate();
         //this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
         //.repo.saveAll(this.estadisticas);
 

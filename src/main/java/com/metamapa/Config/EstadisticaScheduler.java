@@ -20,6 +20,8 @@ public class EstadisticaScheduler {
     public void actualizarResultados() {
         service.actualizarResultadosEstadisticas();
     }
+
+
     @Scheduled(cron = "0 0 2 * * *") // todos los días 02:00 AM
     @SchedulerLock(name = "actualizarEstadisticasDiarias", lockAtLeastFor = "5m", lockAtMostFor = "10m")
     public void actualizarEstadisticas() {

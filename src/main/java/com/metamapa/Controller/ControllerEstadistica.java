@@ -4,11 +4,9 @@ import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import com.metamapa.Domain.entities.InterfaceEstadistica;
 import com.metamapa.Service.ServiceEstadistica;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,21 +21,21 @@ public class ControllerEstadistica {
 
     //Que pueda recibir una especie de filtro y envie según corresponda
     @GetMapping
-    public ResponseEntity<List<EstadisticaOutputDTO>> verEstadisticas(){
-        //Decir que id_estadistica sea !=0
-        List<EstadisticaOutputDTO> estadistica = serviceEstadistica.obtenerResultadosDeEstadisticas();
-        System.out.println("estadistica: " + estadistica);
-        if (estadistica == null) {
-            return ResponseEntity.status(404).body(null);
+    public ResponseEntity<List<EstadisticaOutputDTO>> obtenerEstadisticas(){
+        List<EstadisticaOutputDTO> estadisticasDTO = serviceEstadistica.obtenerResultadosDeEstadisticas();
+        System.out.println("estadistica: " + estadisticasDTO);
+        if (estadisticasDTO == null) {
+            return ResponseEntity.noContent().build(); // Código 204
         }
-        return ResponseEntity.status(200).body(estadistica);
+        return ResponseEntity.ok(estadisticasDTO); // Código 200
     }
     @GetMapping("/{id_estadistica}")
-    public EstadisticaOutputDTO obtenerEstadistica(@PathVariable String id_estadistica){
+    public ResponseEntity<EstadisticaOutputDTO> obtenerEstadisticaPorID(@PathVariable String id_estadistica){
         EstadisticaOutputDTO resultado = serviceEstadistica.obtenerResultadoPorID(id_estadistica);
         if (resultado == null) {
-            ResponseEntity.status(404).body(null);
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(resultado);
     }
 
 
