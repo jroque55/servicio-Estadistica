@@ -44,11 +44,15 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
             // this.setResultado("No hay hechos con la categoria"+this.getDiscriminante().getValor());
             return;
         }
+        calcularResultado();
+    }
+    public void calcularResultado(){
+
 
         int maxCantidad = 0;
         String provinciaMaxCategoria = null;
         //MEJORAR: TODO
-       // datos.stream().max()
+        // datos.stream().max()
         for (ProvCatDTO provinciaRaw : this.provincias) {
             if (provinciaRaw == null) continue;
 
@@ -61,6 +65,5 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         }
         this.setResultado(new ProvCatDTO(provinciaMaxCategoria,(long)maxCantidad));
         this.setCantidad(maxCantidad);
-
     }
 }

@@ -58,29 +58,18 @@ public class ServiceEstadistica {
     //x ahí es mejor que ya los tenga calculados
     @Cacheable("estadisticas")
     //DEBRIA SER UNA LISTA -- DEBERIA CONSIDEREARSE A CAMBIARSE A SOLO EatdisticaOutputDTO
-    public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(String id_estadistica) {
+    public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas() {
         //MEJORAR
-        //esto es por si no hay id_estadistica
-        if(id_estadistica!=null){
-            InterfaceEstadistica estadistica= repo.findById(id_estadistica).orElse(null);
-            if(estadistica==null) return null;
-            EstadisticaOutputDTO estadisticaOutputDTO = this.factoryEstadistica.crearEstadisticaDTO(estadistica);
-            List<EstadisticaOutputDTO> estadisticaOutputDTOs = new ArrayList<>();
-            estadisticaOutputDTOs.add(estadisticaOutputDTO);
-            return estadisticaOutputDTOs;
-        }
-        return generarEstadisticaOutputDTO(repo.findAll());
-           }
-
-    private List<EstadisticaOutputDTO> generarEstadisticaOutputDTO(List<InterfaceEstadistica> estadisticas) {
-        List<EstadisticaOutputDTO> estadisticasDTO = new ArrayList<>();
-        estadisticas.forEach(estadistica -> {
-            estadisticasDTO.add(new EstadisticaOutputDTO(estadistica));
-        });
-        return estadisticasDTO;
-
+        return this.factoryEstadistica.crearListaEstadisticaDTO(repo.findAll());
     }
 
+
+    public EstadisticaOutputDTO obtenerResultadoPorID(String idEstadistica) {
+        InterfaceEstadistica estadisticaBD = repo.findById(idEstadistica).orElse(null);
+        if (estadisticaBD == null) { return null; }
+        EstadisticaOutputDTO estadistica = this.factoryEstadistica.crearEstadisticaDTO(estadisticaBD);
+        return estadistica;
+    }
 
     public String generarCSV(List<InterfaceEstadistica> estadisticas) {
         //MEJORA
@@ -190,6 +179,7 @@ public class ServiceEstadistica {
         refrescarSiEsNecesario();
         return this.estadisticas;
     }
+
 
 }
 

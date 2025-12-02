@@ -23,16 +23,21 @@ public class ControllerEstadistica {
 
     //Que pueda recibir una especie de filtro y envie según corresponda
     @GetMapping
-    public ResponseEntity<List<EstadisticaOutputDTO>> verEstadisticas(
-            @RequestParam (value = "id_estadistica" , required = false) String id_estadistica
-    ){
+    public ResponseEntity<List<EstadisticaOutputDTO>> verEstadisticas(){
         //Decir que id_estadistica sea !=0
-        List<EstadisticaOutputDTO> estadistica = serviceEstadistica.obtenerResultadosDeEstadisticas(id_estadistica);
+        List<EstadisticaOutputDTO> estadistica = serviceEstadistica.obtenerResultadosDeEstadisticas();
         System.out.println("estadistica: " + estadistica);
         if (estadistica == null) {
             return ResponseEntity.status(404).body(null);
         }
         return ResponseEntity.status(200).body(estadistica);
+    }
+    @GetMapping("/{id_estadistica}")
+    public EstadisticaOutputDTO obtenerEstadistica(@PathVariable String id_estadistica){
+        EstadisticaOutputDTO resultado = serviceEstadistica.obtenerResultadoPorID(id_estadistica);
+        if (resultado == null) {
+            ResponseEntity.status(404).body(null);
+        }
     }
 
 
