@@ -24,7 +24,8 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
 
     }
 
-    public void actualizarEstadistica() {
+    @Override
+    public void actualizarResultado() {
 
         // obtengo singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
@@ -46,7 +47,8 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
     private void CalcularResultado(List<CatHourDTO> cantidadXHoras) {
         if (cantidadXHoras == null || cantidadXHoras.isEmpty()) {
-            this.setResultado("No hay hechos con la categoria " + this.getDiscriminante().getValor());
+            this.setResultado(null);
+            //this.setResultado("No hay hechos con la categoria " + this.getDiscriminante().getValor());
             return;
         }
 
@@ -65,7 +67,7 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
             }
         }
 
-        this.setResultado(horaMaxCategoria);
+        this.setResultado(new CatHourDTO(Integer.parseInt(horaMaxCategoria),(long)maxCantidad));
         this.setCantidad(maxCantidad);
     }
 }

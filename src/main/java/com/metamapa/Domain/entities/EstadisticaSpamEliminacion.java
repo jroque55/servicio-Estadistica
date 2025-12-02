@@ -1,9 +1,6 @@
 package com.metamapa.Domain.entities;
 
 import com.metamapa.Domain.dto.input.SpamSummaryDTO;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Transient;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,14 +19,14 @@ public class EstadisticaSpamEliminacion extends InterfaceEstadistica {
     private Long resultado;
     private Long cantidadTotal;
 
-    @Transient
-   // private final Map<String, Integer> mapaSpam = new HashMap<>();
+    // private final Map<String, Integer> mapaSpam = new HashMap<>();
     private Long totalDeSolicitudes;
     public EstadisticaSpamEliminacion() {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.SIN,"" ));
         this.setTipoEstadistica(EnumTipoEstadistica.CANTSOLICITUDESSPAM);
     }
 
+    @Override
     public void actualizarResultado() {
 
         ClienteAgregador cliente = getClienteAgregador();

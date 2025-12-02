@@ -6,4 +6,9 @@ import lombok.Data;
 public class CategoryDTO {
     private String categoria;
     private Long cantidad;
+
+    public CategoryDTO(String categoria, Long cantidad) {
+        this.categoria = categoria;
+        this.cantidad = cantidad;
+    }
 }

@@ -8,13 +8,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "estadisticas")
-@Getter
-@Setter
+
 public abstract class InterfaceEstadistica {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_estadistica;
+    private String id;
     private EnumTipoEstadistica tipoEstadistica;
     private Discriminante discriminante;
     //private String descripcion; //Sería el nombre de lo que diferecia la estadística

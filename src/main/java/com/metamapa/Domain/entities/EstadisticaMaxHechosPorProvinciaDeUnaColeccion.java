@@ -1,8 +1,6 @@
 package com.metamapa.Domain.entities;
 
 import com.metamapa.Domain.dto.input.ProvinceDTO;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,7 +25,8 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
         this.setTipoEstadistica(EnumTipoEstadistica.MAXPROVINCIADEUNACOLECCION);
     }
 
-    public void actualizarEstadistica() {
+    @Override
+    public void actualizarResultado() {
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
 
@@ -47,7 +46,8 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
         // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
     private void CalcularResultado(List< ProvinceDTO > provincias) {
         if (provincias == null || provincias.isEmpty()) {
-            this.setResultado("No hay hechos en la coleccion " + this.getDiscriminante().getValor());
+            this.setResultado(null);
+           // this.setResultado("No hay hechos en la coleccion " + this.getDiscriminante().getValor());
             return;
         }
         int maxCantidad = 0;
@@ -62,7 +62,7 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
                 provinciaMax = (provinciaraw.getProvincia() == null) ? null : provinciaraw.getProvincia();
             }
         }
-        this.setResultado(provinciaMax);
+        this.setResultado(new ProvinceDTO(provinciaMax,(long)maxCantidad));
         this.setCantidad(maxCantidad);
     }
 }

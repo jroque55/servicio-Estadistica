@@ -1,9 +1,6 @@
 package com.metamapa.Domain.entities;
 
 import com.metamapa.Domain.dto.input.ProvCatDTO;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,7 +21,8 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         this.setTipoEstadistica(EnumTipoEstadistica.MAXPROVINCIASEGUNCONCATEGORIA);
     }
 
-    public void actualizarEstadistica() {
+    @Override
+    public void actualizarResultado() {
 
         // obtener el singleton ClienteAgregador
         ClienteAgregador cliente = getClienteAgregador();
@@ -42,7 +40,8 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         }
 
         if (this.provincias == null || this.provincias.isEmpty()) {
-            this.setResultado("No hay hechos con la categoria"+this.getDiscriminante().getValor());
+           this.setResultado(null);
+            // this.setResultado("No hay hechos con la categoria"+this.getDiscriminante().getValor());
             return;
         }
 
@@ -60,7 +59,7 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
                 provinciaMaxCategoria = provinciaRaw.getProvincia();
             }
         }
-        this.setResultado(provinciaMaxCategoria);
+        this.setResultado(new ProvCatDTO(provinciaMaxCategoria,(long)maxCantidad));
         this.setCantidad(maxCantidad);
 
     }

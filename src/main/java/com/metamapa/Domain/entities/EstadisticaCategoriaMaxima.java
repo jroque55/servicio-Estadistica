@@ -1,9 +1,7 @@
 package com.metamapa.Domain.entities;
 
 import com.metamapa.Domain.dto.input.CategoryDTO;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jdk.jshell.spi.ExecutionEnv;
+
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,8 +23,16 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
         this.setTipoEstadistica(EnumTipoEstadistica.MAXCATEGORIACONHECHOS);
     }
 
+    public EstadisticaCategoriaMaxima(String categoria , Long cantidad, List<CategoryDTO> otros) {
+        this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.SIN,"" ));
+        this.setTipoEstadistica(EnumTipoEstadistica.MAXCATEGORIACONHECHOS);
+        this.setResultado(new CategoryDTO(categoria,cantidad));
+        this.setCategorias(otros);
+    }
 
-    public void actualizarEstadistica() {
+
+    @Override
+    public void actualizarResultado() {
 
         ClienteAgregador cliente = getClienteAgregador();
         if (cliente == null) return;
@@ -41,7 +47,8 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
     // Mueve la lógica de cálculo de resultado aquí (solicitado entre líneas 47 y 63)
     private void CalcularResultado(List<CategoryDTO> categorias) {
         if (categorias == null || categorias.isEmpty()) {
-            this.setResultado("No hay hechos ");
+            this.setResultado(null);
+            //this.setResultado("No hay hechos ");
             return;
         }
 
@@ -61,7 +68,7 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
             }
         }
 
-        this.setResultado(categoriaMax);
+        this.setResultado(new CategoryDTO(categoriaMax,(long)maxCantidad));
         this.setCantidad(maxCantidad);
     }
 

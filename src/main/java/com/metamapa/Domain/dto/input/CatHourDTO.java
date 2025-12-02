@@ -6,4 +6,9 @@ import lombok.Data;
 public class CatHourDTO {
     private Integer hora;
     private Long cantidad;
+
+    public CatHourDTO(Integer hora,Long cantidad) {
+        this.hora=hora;
+        this.cantidad = cantidad;
+    }
 }
