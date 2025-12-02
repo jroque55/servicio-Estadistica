@@ -3,13 +3,14 @@ package com.metamapa.Domain.dto.output;
 import com.metamapa.Domain.entities.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Data
 public class EstadisticaOutputDTO {
     private DatoDTO resultado;
-    private List<DatoDTO> datos;
+    private List<DatoDTO> datos = new ArrayList<>();
     private DiscriminanteDTO discriminante;
 
     public EstadisticaOutputDTO() {

@@ -1,22 +1,69 @@
 package com.metamapa.Domain.entities;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Field;
+
+@Component
 public class ExportadorCSV implements IExportador{
 
-    private final EstadisticaCategoriaMaxima ecm;
-    private final EstadisticaMaxHechosPorProvinciaDeUnaColeccion ehppc;
-    private final EstadisticaHoraPorCategoria ehpc;
-    private final EstadisticaProvinciaPorCategoria eppc;
-    private final EstadisticaSpamEliminacion ese;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public ExportadorCSV(String nombreColeccion, String categoria) {
-        this.ecm = new EstadisticaCategoriaMaxima();
-        this.ehppc = new EstadisticaMaxHechosPorProvinciaDeUnaColeccion(nombreColeccion);
-        this.ehpc = new EstadisticaHoraPorCategoria(categoria);
-        this.eppc = new EstadisticaProvinciaPorCategoria(categoria);
-        this.ese = new EstadisticaSpamEliminacion();
+    @Override
+    public String exportar(EstadisticaOutputDTO obj) {
+        try {
+            Class<?> clazz = obj.getClass();
+            Field[] fields = clazz.getDeclaredFields();
+
+            StringBuilder sb = new StringBuilder();
+
+            // HEADER
+            for (int i = 0; i < fields.length; i++) {
+                sb.append(fields[i].getName());
+                if (i < fields.length - 1) sb.append(",");
+            }
+            sb.append("\n");
+
+            // VALUES
+            for (int i = 0; i < fields.length; i++) {
+                fields[i].setAccessible(true);
+                Object value = fields[i].get(obj);
+
+                if (value == null) {
+                    sb.append("");
+                } else if (isSimpleValue(value)) {
+                    sb.append(value.toString());
+                } else {
+                    // Serialización para listas u objetos complejos
+                    sb.append("\"").append(mapper.writeValueAsString(value)).append("\"");
+                }
+
+                if (i < fields.length - 1) sb.append(",");
+            }
+
+            return sb.toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error exportando CSV", e);
+        }
     }
+
+    private boolean isSimpleValue(Object value) {
+        return value instanceof String ||
+                value instanceof Integer ||
+                value instanceof Long ||
+                value instanceof Boolean;
+    }
+
+
+
+
     /*
+
+
     @Override
     public String obtenerArchivoTipo(EstadisticasDTO estadisticas) {
         // Crear un espacio para escribir el CSV

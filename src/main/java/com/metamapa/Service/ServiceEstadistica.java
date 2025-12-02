@@ -20,11 +20,13 @@ public class ServiceEstadistica {
     private final ClienteAgregador clienteAgregador;
     private List<InterfaceEstadistica> estadisticas = new ArrayList<>();
     private IRepositoryEstadisticas repo ;
+    private IExportador exportador;
 
 
-    public ServiceEstadistica(ClienteAgregador cliente,IRepositoryEstadisticas repo){
+    public ServiceEstadistica(ClienteAgregador cliente,IRepositoryEstadisticas repo, IExportador exportador){
         this.clienteAgregador = cliente;
         this.repo = repo;
+        this.exportador= exportador;
     }
     public void actualizarResultadosEstadisticas() {
         if(this.estadisticas.isEmpty()){
@@ -39,6 +41,7 @@ public class ServiceEstadistica {
         System.out.println("Estadísticas actualizadas y persistidas");
     }
     @Cacheable("estadisticas")
+    //DEBRIA SER UNA LISTA -- DEBERIA CONSIDEREARSE A CAMBIARSE A SOLO EatdisticaOutputDTO
     public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas(long id_estadistica) {
         if (id_estadistica == 0) {
             //NO ENTIENDO POR QUE SE REALIZA ESTO
@@ -64,10 +67,13 @@ public class ServiceEstadistica {
 
 
     public String generarCSV(List<InterfaceEstadistica> estadisticas) {
-        //EstadisticaOutputDTO dto = obtenerEstadisticas(estadisticas.get(1).getId_estadistica());
-        //ExportadorCSV exp = new ExportadorCSV();
-        //return exp.obtenerArchivoTipo(dto);
-        return "ewewe";
+        //MEJORA
+        //En aqui se utiliza solo una estadistica , ver como hacer
+        List<EstadisticaOutputDTO> dto = obtenerResultadosDeEstadisticas(Long.parseLong(estadisticas.get(1).getId()));
+        String estadisticaCSV ="";
+       //String estadisticaCSV= this.exportador.exportar(dto);
+
+        return estadisticaCSV;
     }
 
     public void actualizarEstadisticas() {

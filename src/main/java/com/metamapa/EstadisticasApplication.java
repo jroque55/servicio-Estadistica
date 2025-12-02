@@ -2,7 +2,9 @@ package com.metamapa;
 
 import com.metamapa.Controller.ControllerEstadistica;
 import com.metamapa.Domain.dto.input.CategoryDTO;
+import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import com.metamapa.Domain.entities.EstadisticaCategoriaMaxima;
+import com.metamapa.Domain.entities.ExportadorCSV;
 import com.metamapa.Domain.entities.InterfaceEstadistica;
 import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
 import org.springframework.boot.SpringApplication;
@@ -37,8 +39,19 @@ public class EstadisticasApplication {
         Optional<InterfaceEstadistica> estadistica = repo.findById("692edc046a5cfa2bff372537");
         InterfaceEstadistica esta= estadistica.get();
         EstadisticaCategoriaMaxima cat = (EstadisticaCategoriaMaxima) esta;
-        System.out.println(cat.getTipoEstadistica());
-        System.out.println(cat.getResultado());
+
+        System.out.println("Datos Estadisticas : ");
+        System.out.println(" " +cat.getTipoEstadistica());
+        System.out.println(" " +cat.getResultado());
+
+        EstadisticaOutputDTO estadisticaOutputDTO = new EstadisticaOutputDTO(cat);
+
+        ExportadorCSV exportador= context.getBean(ExportadorCSV.class);
+        String valorCSV = exportador.exportar(estadisticaOutputDTO);
+        System.out.println("Valor Exportable ");
+        System.out.println(" " +valorCSV);
+
+
 
 
     }
