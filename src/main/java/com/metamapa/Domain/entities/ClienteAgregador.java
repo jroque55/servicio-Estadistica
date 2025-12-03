@@ -15,7 +15,7 @@ public class ClienteAgregador {
     private static volatile ClienteAgregador INSTANCE;
 
     public ClienteAgregador(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl("http://localhost:8080/estadisticas").build();
+        this.webClient = builder.baseUrl("http://localhost:8081/estadisticas").build();
         // set singleton reference
         INSTANCE = this;
     }
@@ -69,13 +69,6 @@ public class ClienteAgregador {
                 .block();
     }
 
-    public List<String> obtenerProvincias() {
-        return webClient.get()
-                .uri("/provincias/nombre")
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
-                .block();
-    }
 
     public List<String> obtenerCategorias() {
         return webClient.get()

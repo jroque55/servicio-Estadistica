@@ -3,10 +3,12 @@ package com.metamapa;
 import com.metamapa.Controller.ControllerEstadistica;
 import com.metamapa.Domain.dto.input.CategoryDTO;
 import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
-import com.metamapa.Domain.entities.EstadisticaCategoriaMaxima;
+//import com.metamapa.Domain.entities.EstadisticaCategoriaMaxima;
+import com.metamapa.Domain.entities.ClienteAgregador;
 import com.metamapa.Domain.entities.ExportadorCSV;
 import com.metamapa.Domain.entities.InterfaceEstadistica;
 import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
+import com.metamapa.Service.ServiceEstadistica;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -30,10 +32,17 @@ public class EstadisticasApplication {
                 new CategoryDTO("Libros", 33L)
         );
 
+        //ClienteAgregador cliente = context.getBean(ClienteAgregador.class);
+        ServiceEstadistica service = context.getBean(ServiceEstadistica.class);
+        service.actualizarEstadisticas();
+       // List<InterfaceEstadistica> estadisticas = service.getEstadisticas();
+
+        /*
         InterfaceEstadistica est = new EstadisticaCategoriaMaxima("Incendio",200L,categorias); // o la clase que uses
         repo.save(est);
 
         System.out.println("Guardada OK en Mongo");
+
 
         Optional<InterfaceEstadistica> estadistica = repo.findById("692edc046a5cfa2bff372537");
         InterfaceEstadistica esta= estadistica.get();
@@ -44,11 +53,12 @@ public class EstadisticasApplication {
         System.out.println(" " +cat.getResultado());
 
         EstadisticaOutputDTO estadisticaOutputDTO = new EstadisticaOutputDTO(cat);
-
-        ExportadorCSV exportador= context.getBean(ExportadorCSV.class);
+        */
+        // ExportadorCSV exportador= context.getBean(ExportadorCSV.class);
         //String valorCSV = exportador.exportar(estadisticaOutputDTO);
+        String verEstadisticas = service.generarCSV();
         System.out.println("Valor Exportable ");
-        //System.out.println(" " +valorCSV);
+        System.out.println(" " +verEstadisticas);
 
 
 

@@ -1,20 +1,20 @@
 package com.metamapa.Config;
 
 import com.metamapa.Service.ServiceEstadistica;
+import lombok.NoArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 @Component
 public class EstadisticaScheduler {
-    @Autowired
-    private final ServiceEstadistica service;
+
+    private  ServiceEstadistica service;
 
     public EstadisticaScheduler(ServiceEstadistica service) {
         this.service = service;
     }
-
+    public EstadisticaScheduler(){}
     @Scheduled(fixedDelay = 300_000) // cada 5 minutos
     @SchedulerLock(name = "actualizarResultados", lockAtMostFor = "10m", lockAtLeastFor = "1m")
     public void actualizarResultados() {

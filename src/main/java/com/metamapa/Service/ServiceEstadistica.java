@@ -7,6 +7,7 @@ import com.metamapa.Domain.entities.*;
 import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
 import com.metamapa.Domain.entities.repository.RepositoryEstadisticaUpdate;
 import jakarta.annotation.PostConstruct;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @Service
 public class ServiceEstadistica {
 
-    private final ClienteAgregador clienteAgregador;
+    private ClienteAgregador clienteAgregador;
     private List<InterfaceEstadistica> estadisticas = new ArrayList<>();
     private IRepositoryEstadisticas repo ;
     private IExportador exportador;
@@ -40,6 +41,7 @@ public class ServiceEstadistica {
         //this.ultimoUpdateLocal= repoUpdate.findById("singleton").orElse(null).getLastUpdate();
 
     }
+    public ServiceEstadistica(){};
     public synchronized void actualizarResultadosEstadisticas() {
         if(this.estadisticas.isEmpty()){
             this.estadisticas = repo.findAll();
