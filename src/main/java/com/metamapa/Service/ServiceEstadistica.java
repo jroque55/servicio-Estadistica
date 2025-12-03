@@ -41,7 +41,6 @@ public class ServiceEstadistica {
         //this.ultimoUpdateLocal= repoUpdate.findById("singleton").orElse(null).getLastUpdate();
 
     }
-    public ServiceEstadistica(){};
     public synchronized void actualizarResultadosEstadisticas() {
         if(this.estadisticas.isEmpty()){
             this.estadisticas = repo.findAll();

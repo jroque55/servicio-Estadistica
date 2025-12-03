@@ -51,10 +51,11 @@ public class ExportadorCSV implements IExportador{
         StringBuilder sb = new StringBuilder();
         sb.append("#").append(est.getClass()+"\n");
         sb.append("Coleccion ,Provincia,Cantidad_Hechos\n");
-
-        for (ProvinceDTO p : est.getProvincias()) {
-            sb.append(est.getDiscriminante().getValor()).append(p.getProvincia()).append(",")
-                    .append(p.getCantidad()).append("\n");
+        if (est.getProvincias() != null) {
+            for (ProvinceDTO p : est.getProvincias()) {
+                sb.append(est.getDiscriminante().getValor()).append(p.getProvincia()).append(",")
+                        .append(p.getCantidad()).append("\n");
+            }
         }
         return sb.toString();
     }
@@ -75,10 +76,11 @@ public class ExportadorCSV implements IExportador{
         StringBuilder sb = new StringBuilder();
         sb.append("#").append(est.getClass()+"\n");
         sb.append("Categoria,Hora ,Cantidad_hechos\n");
-
-        for (CatHourDTO p : est.getCantidadXHoras()) {
-            sb.append(est.getDiscriminante().getValor()).append(",").append(p.getHora()).append(",")
-                    .append(p.getCantidad()).append("\n");
+        if(est.getCantidadXHoras() != null) {
+            for (CatHourDTO p : est.getCantidadXHoras()) {
+                sb.append(est.getDiscriminante().getValor()).append(",").append(p.getHora()).append(",")
+                        .append(p.getCantidad()).append("\n");
+            }
         }
         return sb.toString();
     }
@@ -87,10 +89,11 @@ public class ExportadorCSV implements IExportador{
         StringBuilder sb = new StringBuilder();
         sb.append("#").append(est.getClass()+"\n");
         sb.append("Categoria,Cantidad_Hechos\n");
-
-        for (ProvCatDTO p : est.getProvincias()) {
-            sb.append(est.getDiscriminante().getValor()).append(",").append(p.getProvincia()).append(",")
-                    .append(p.getCantidad()).append("\n");
+        if(est.getProvincias() != null) {
+            for (ProvCatDTO p : est.getProvincias()) {
+                sb.append(est.getDiscriminante().getValor()).append(",").append(p.getProvincia()).append(",")
+                        .append(p.getCantidad()).append("\n");
+            }
         }
         return sb.toString();
     }

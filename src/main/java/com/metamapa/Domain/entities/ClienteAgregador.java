@@ -39,11 +39,12 @@ public class ClienteAgregador {
                 .block();
     }
     public List<ProvinceDTO> obtenerCantHechosXProvinciaDe(String nombreColeccion) {
-        return webClient.get()
+        List<ProvinceDTO> lista = webClient.get()
                 .uri("/provinciaxcol?coleccion=" + nombreColeccion)//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ProvinceDTO>>() {})
                 .block();
+        return lista;
     }
     public List<CategoryDTO> obtenerCantHechosPorCategoria() {
         return webClient.get()

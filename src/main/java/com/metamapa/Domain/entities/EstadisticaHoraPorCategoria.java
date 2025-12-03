@@ -22,7 +22,9 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
     public EstadisticaHoraPorCategoria(String categoria) {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria ));
         this.setTipoEstadistica(MAXHORASEGUNCATEGORIA);
-
+    }
+    public EstadisticaHoraPorCategoria(){
+        this.setTipoEstadistica(MAXHORASEGUNCATEGORIA);
     }
 
     @Override

@@ -7,9 +7,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+@Document(collection = "estadisticas")
 @Data
-@Document("estadisticas")
 public abstract class InterfaceEstadistica {
     @Id
     private String id;

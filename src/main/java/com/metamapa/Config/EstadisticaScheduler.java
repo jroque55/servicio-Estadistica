@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class EstadisticaScheduler {
 
-    private  ServiceEstadistica service;
+    private ServiceEstadistica service;
 
     public EstadisticaScheduler(ServiceEstadistica service) {
         this.service = service;
     }
-    public EstadisticaScheduler(){}
+
     @Scheduled(fixedDelay = 300_000) // cada 5 minutos
     @SchedulerLock(name = "actualizarResultados", lockAtMostFor = "10m", lockAtLeastFor = "1m")
     public void actualizarResultados() {
@@ -23,7 +23,7 @@ public class EstadisticaScheduler {
 
 
     @Scheduled(cron = "0 0 2 * * *") // todos los días 02:00 AM
-    @SchedulerLock(name = "actualizarEstadisticasDiarias", lockAtLeastFor = "5m", lockAtMostFor = "10m")
+    @SchedulerLock(name = "actualizarEstadisticasDiaries", lockAtLeastFor = "5m", lockAtMostFor = "10m")
     public void actualizarEstadisticas() {
         service.actualizarEstadisticas();
     }

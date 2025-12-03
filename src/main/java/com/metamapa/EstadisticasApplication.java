@@ -1,5 +1,6 @@
 package com.metamapa;
 
+import com.metamapa.Config.EstadisticaScheduler;
 import com.metamapa.Controller.ControllerEstadistica;
 import com.metamapa.Domain.dto.input.CategoryDTO;
 import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
@@ -23,7 +24,7 @@ public class EstadisticasApplication {
     var context = SpringApplication.run(EstadisticasApplication.class, args);
         System.out.println("Servicio de Estadistica INICIADA");
         IRepositoryEstadisticas repo = context.getBean(IRepositoryEstadisticas.class);
-
+        System.out.println(repo.findAll().size());
         List<CategoryDTO> categorias = List.of(
                 new CategoryDTO("Electrónica", 120L),
                 new CategoryDTO("Ropa", 85L),
@@ -34,7 +35,8 @@ public class EstadisticasApplication {
 
         //ClienteAgregador cliente = context.getBean(ClienteAgregador.class);
         ServiceEstadistica service = context.getBean(ServiceEstadistica.class);
-        service.actualizarEstadisticas();
+        //EstadisticaScheduler scheduler = new EstadisticaScheduler(service);
+        service.actualizarResultadosEstadisticas();
        // List<InterfaceEstadistica> estadisticas = service.getEstadisticas();
 
         /*
@@ -59,6 +61,8 @@ public class EstadisticasApplication {
         String verEstadisticas = service.generarCSV();
         System.out.println("Valor Exportable ");
         System.out.println(" " +verEstadisticas);
+
+        System.out.println("Mandale Mecha");
 
 
 

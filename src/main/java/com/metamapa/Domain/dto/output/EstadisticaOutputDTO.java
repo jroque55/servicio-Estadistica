@@ -34,47 +34,71 @@ public class EstadisticaOutputDTO {
     }
 
     public EstadisticaOutputDTO(EstadisticaCategoriaMaxima estadistica) {
-        estadistica.getCategorias().forEach(estadisticaCategoria -> {
-            this.datos.add(new DatoDTO(estadisticaCategoria.getCategoria(),
-                    estadisticaCategoria.getCantidad()));
-        });
-        this.resultado = new DatoDTO(estadistica.getResultado().getCategoria(), estadistica.getResultado().getCantidad());
+        if (estadistica.getCategorias() != null) {
+            estadistica.getCategorias().forEach(estadisticaCategoria -> {
+                this.datos.add(new DatoDTO(estadisticaCategoria.getCategoria(),
+                        estadisticaCategoria.getCantidad()));
+            });
+        } else this.datos = new ArrayList<>();
+        if(estadistica.getResultado() != null){
+            this.resultado = new DatoDTO(estadistica.getResultado().getCategoria(), estadistica.getResultado().getCantidad());
+        } else this.resultado = new DatoDTO("Sin Resultado", 0L);
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
     }
 
     public EstadisticaOutputDTO(EstadisticaHoraPorCategoria estadistica) {
-        estadistica.getCantidadXHoras().forEach(estadisticaCategoria -> {
-            this.datos.add(new DatoDTO(estadisticaCategoria.getHora().toString(),
-                    estadisticaCategoria.getCantidad()));
-        });
-        this.resultado = new DatoDTO(estadistica.getResultado().getHora().toString(), estadistica.getResultado().getCantidad());
+        if(estadistica.getCantidadXHoras() != null){
+            estadistica.getCantidadXHoras().forEach(estadisticaCategoria -> {
+                this.datos.add(new DatoDTO(estadisticaCategoria.getHora().toString(),
+                        estadisticaCategoria.getCantidad()));
+            });
+        }else this.datos = new ArrayList<>();
+        if(estadistica.getResultado() != null){
+            this.resultado = new DatoDTO(estadistica.getResultado().getHora().toString(), estadistica.getResultado().getCantidad());
+        }else new DatoDTO("Sin Resultado", 0L);
+
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
     }
 
     public EstadisticaOutputDTO(EstadisticaMaxHechosPorProvinciaDeUnaColeccion estadistica) {
-        estadistica.getProvincias().forEach(estadisticaCategoria -> {
-            this.datos.add(new DatoDTO(estadisticaCategoria.getProvincia(),
-                    estadisticaCategoria.getCantidad()));
-        });
-        this.resultado = new DatoDTO(estadistica.getResultado().getProvincia(), estadistica.getResultado().getCantidad());
+        if(estadistica.getProvincias()!=null) {
+            estadistica.getProvincias().forEach(estadisticaCategoria -> {
+                this.datos.add(new DatoDTO(estadisticaCategoria.getProvincia(),
+                        estadisticaCategoria.getCantidad()));
+            });
+        }else this.datos = new ArrayList<>();
+        if(estadistica.getResultado() != null){
+            this.resultado = new DatoDTO(estadistica.getResultado().getProvincia(), estadistica.getResultado().getCantidad());
+        }else this.resultado = new DatoDTO("Sin Resultado", 0L);
+
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
     }
 
     public EstadisticaOutputDTO(EstadisticaProvinciaPorCategoria estadistica) {
-        estadistica.getProvincias().forEach(estadisticaCategoria -> {
-            this.datos.add(new DatoDTO(estadisticaCategoria.getProvincia(),
-                    estadisticaCategoria.getCantidad()));
-        });
-        this.resultado = new DatoDTO(estadistica.getResultado().getProvincia(), estadistica.getResultado().getCantidad());
+        if(estadistica.getProvincias()!=null) {
+            estadistica.getProvincias().forEach(estadisticaCategoria -> {
+                this.datos.add(new DatoDTO(estadisticaCategoria.getProvincia(),
+                        estadisticaCategoria.getCantidad()));
+            });
+        }else this.datos = new ArrayList<>();
+        if(estadistica.getResultado() != null){
+            this.resultado = new DatoDTO(estadistica.getResultado().getProvincia(), estadistica.getResultado().getCantidad());
+        }else this.resultado = new DatoDTO("Sin Resultado", 0L);
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
     }
 
     public EstadisticaOutputDTO(EstadisticaSpamEliminacion estadistica) {
-        DatoDTO resultado = new DatoDTO("cantidad spam", estadistica.getResultado());
-        this.datos.add(new DatoDTO("cantidad total", estadistica.getCantidadTotal()));
-        this.datos.add(resultado);
-        this.resultado = resultado;
+        if(estadistica.getResultado() != null && estadistica.getCantidadTotal() != null){
+            DatoDTO resultado = new DatoDTO("cantidad spam", estadistica.getResultado());
+            this.datos.add(new DatoDTO("cantidad total", estadistica.getCantidadTotal()));
+            this.datos.add(resultado);
+            this.resultado = resultado;
+        }else {
+            this.datos = new ArrayList<>();
+            this.resultado = new DatoDTO("Sin Resultado", 0L);
+            }
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
     }
 }
+
 

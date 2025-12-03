@@ -21,7 +21,9 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
         this.setDiscriminante(new Discriminante(EnumTipoDiscriminante.CATEGORIA,categoria));
         this.setTipoEstadistica(EnumTipoEstadistica.MAXPROVINCIASEGUNCONCATEGORIA);
     }
-
+    public EstadisticaProvinciaPorCategoria(){
+        this.setTipoEstadistica(EnumTipoEstadistica.MAXPROVINCIASEGUNCONCATEGORIA);
+    }
     @Override
     public void actualizarResultado() {
 

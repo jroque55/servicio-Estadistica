@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StartupLoader {
-    @Autowired
+
     private  ServiceEstadistica service;
 
     public StartupLoader(ServiceEstadistica service) {
         this.service = service;
     }
-    public StartupLoader(){};
     @PostConstruct
     public void init() {
         service.cargarEstadisticasDesdeDB();
