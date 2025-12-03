@@ -4,5 +4,5 @@ import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 
 public interface IExportador {
     //public String obtenerArchivoTipo(EstadisticasDTO estadisticas);
-    String exportar(EstadisticaOutputDTO estaditica);
+    String exportar(InterfaceEstadistica estaditica);
 }

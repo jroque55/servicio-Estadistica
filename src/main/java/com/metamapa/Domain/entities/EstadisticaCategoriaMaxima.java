@@ -1,11 +1,11 @@
 package com.metamapa.Domain.entities;
-
 import com.metamapa.Domain.dto.input.CategoryDTO;
 
 import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -14,7 +14,7 @@ import java.util.List;
 @TypeAlias("estadistica_catMax")
 public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
     private List<CategoryDTO> categorias;
-    private Integer cantidad;
+    //private Integer cantidad;
     private CategoryDTO resultado;
 
 
@@ -52,24 +52,10 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
             return;
         }
 
-        int maxCantidad = 0;
-        String categoriaMax = null;
-        // recorrer y buscar la hora con mayor cantidad
-        for (CategoryDTO categoriaraw : categorias) {
-            if (categoriaraw == null) continue;
+        categorias.sort(Comparator.comparing(CategoryDTO::getCantidad).reversed());
 
-            Long cant = categoriaraw.getCantidad();
-            int cantidadActual = (cant == null) ? 0 : cant.intValue();
+        this.setResultado(categorias.get(0));
 
-            if (cantidadActual > maxCantidad) {
-                maxCantidad = cantidadActual;
-                //VER ESTO
-                categoriaMax = (categoriaraw.getCategoria() != null) ? categoriaraw.getCategoria() : null ;
-            }
-        }
-
-        this.setResultado(new CategoryDTO(categoriaMax,(long)maxCantidad));
-        this.setCantidad(maxCantidad);
     }
 
 }

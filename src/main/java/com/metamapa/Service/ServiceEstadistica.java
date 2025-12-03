@@ -73,12 +73,14 @@ public class ServiceEstadistica {
         return est == null ? null : factoryEstadistica.crearEstadisticaDTO(est);
     }
 
-    public String generarCSV(List<InterfaceEstadistica> estadisticas) {
-        //MEJORA
-        //En aqui se utiliza solo una estadistica , ver como hacer
-        List<EstadisticaOutputDTO> dto = obtenerResultadosDeEstadisticas(); //TRAE TODOS
+    public String generarCSV() {
+        List<InterfaceEstadistica> estadisticas = this.obtener();
         String estadisticaCSV ="";
-       //String estadisticaCSV= this.exportador.exportar(dto);
+        for(InterfaceEstadistica est :estadisticas ){
+            String aExportar = this.exportador.exportar(est);
+            estadisticaCSV +=aExportar;
+
+        }
 
         return estadisticaCSV;
     }

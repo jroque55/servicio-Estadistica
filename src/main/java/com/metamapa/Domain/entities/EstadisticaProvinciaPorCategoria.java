@@ -5,13 +5,14 @@ import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 @Data
 @Document(collection = "estadisticas")
 @TypeAlias("estadistica_maxProvCat")
 public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
-    private Integer cantidad;
+   // private Integer cantidad;
     private List<ProvCatDTO> provincias;
     private ProvCatDTO resultado;
 
@@ -49,21 +50,11 @@ public class EstadisticaProvinciaPorCategoria extends InterfaceEstadistica {
     public void calcularResultado(){
 
 
-        int maxCantidad = 0;
-        String provinciaMaxCategoria = null;
-        //MEJORAR: TODO
-        // datos.stream().max()
-        for (ProvCatDTO provinciaRaw : this.provincias) {
-            if (provinciaRaw == null) continue;
+        this.provincias.sort(Comparator.comparing(ProvCatDTO::getCantidad).reversed());
 
-            int cantidadActual = provinciaRaw.getCantidad().intValue();
+        this.setResultado(this.provincias.get(0));
+       // this.setCantidad(maxCantidad);
 
-            if (cantidadActual > maxCantidad) {
-                maxCantidad = cantidadActual;
-                provinciaMaxCategoria = provinciaRaw.getProvincia();
-            }
-        }
-        this.setResultado(new ProvCatDTO(provinciaMaxCategoria,(long)maxCantidad));
-        this.setCantidad(maxCantidad);
+        //MEJORA : PODRIAMOS ORDENAR LOS DATOS PARA OBTENER TOP 10 O ALGO PARECIDO.
     }
 }

@@ -46,9 +46,9 @@ public class EstadisticasApplication {
         EstadisticaOutputDTO estadisticaOutputDTO = new EstadisticaOutputDTO(cat);
 
         ExportadorCSV exportador= context.getBean(ExportadorCSV.class);
-        String valorCSV = exportador.exportar(estadisticaOutputDTO);
+        //String valorCSV = exportador.exportar(estadisticaOutputDTO);
         System.out.println("Valor Exportable ");
-        System.out.println(" " +valorCSV);
+        //System.out.println(" " +valorCSV);
 
 
 

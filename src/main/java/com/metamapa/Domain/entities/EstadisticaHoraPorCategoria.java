@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.metamapa.Domain.entities.EnumTipoEstadistica.MAXHORASEGUNCATEGORIA;
@@ -14,7 +15,7 @@ import static com.metamapa.Domain.entities.EnumTipoEstadistica.MAXHORASEGUNCATEG
 @Document(collection = "estadisticas")
 @TypeAlias("estadistica_horaXCategoria")
 public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
-    private Integer cantidad;
+    //private Integer cantidad;
     private List<CatHourDTO> cantidadXHoras;
     private CatHourDTO resultado;
 
@@ -52,22 +53,9 @@ public class EstadisticaHoraPorCategoria extends InterfaceEstadistica {
             return;
         }
 
-        int maxCantidad = 0;
-        String horaMaxCategoria = null;
-        // recorrer y buscar la hora con mayor cantidad
-        for (CatHourDTO horaraw : cantidadXHoras) {
-            if (horaraw == null) continue;
+        cantidadXHoras.sort(Comparator.comparing(CatHourDTO::getCantidad).reversed());
 
-            Long cant = horaraw.getCantidad();
-            int cantidadActual = (cant == null) ? 0 : cant.intValue();
-
-            if (cantidadActual > maxCantidad) {
-                maxCantidad = cantidadActual;
-                horaMaxCategoria = (horaraw.getHora() == null) ? null : horaraw.getHora().toString();
-            }
-        }
-
-        this.setResultado(new CatHourDTO(Integer.parseInt(horaMaxCategoria),(long)maxCantidad));
-        this.setCantidad(maxCantidad);
+        this.setResultado(cantidadXHoras.get(0));
+        //this.setCantidad(maxCantidad);
     }
 }

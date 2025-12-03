@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 @Document(collection = "estadisticas")
 @TypeAlias("estadistica_maxProv")
 public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEstadistica {
-    private Integer cantidad;
+    //private Integer cantidad;
     private List<ProvinceDTO> provincias;
     private ProvinceDTO resultado;
 
@@ -50,19 +51,10 @@ public class EstadisticaMaxHechosPorProvinciaDeUnaColeccion extends InterfaceEst
            // this.setResultado("No hay hechos en la coleccion " + this.getDiscriminante().getValor());
             return;
         }
-        int maxCantidad = 0;
-        String provinciaMax = null;
-        // recorrer y buscar la hora con mayor cantidad
-        for (ProvinceDTO provinciaraw : provincias) {
-            if (provinciaraw == null) continue;
-            Long cant = provinciaraw.getCantidad();
-            int cantidadActual = (cant == null) ? 0 : cant.intValue();
-            if (cantidadActual > maxCantidad) {
-                maxCantidad = cantidadActual;
-                provinciaMax = (provinciaraw.getProvincia() == null) ? null : provinciaraw.getProvincia();
-            }
-        }
-        this.setResultado(new ProvinceDTO(provinciaMax,(long)maxCantidad));
-        this.setCantidad(maxCantidad);
+        //Obtenemos en base a la cantidad de hechos en una provincia de una coleccion
+        provincias.sort(Comparator.comparing(ProvinceDTO::getCantidad).reversed());
+
+        this.setResultado(provincias.get(0));
+        //this.setCantidad(maxCantidad);
     }
 }

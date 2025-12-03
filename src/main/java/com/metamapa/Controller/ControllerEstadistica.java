@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/estadisticas")
 public class ControllerEstadistica {
-    private List<InterfaceEstadistica> estadisticas;
+    //private List<InterfaceEstadistica> estadisticas;
     private final ServiceEstadistica serviceEstadistica;
 
     public ControllerEstadistica(ServiceEstadistica service) {
@@ -78,7 +78,9 @@ public class ControllerEstadistica {
     @GetMapping(value="/exportar", produces = "text/csv")
     public ResponseEntity<String> exportarCSV(){
 
-        String csv = serviceEstadistica.generarCSV(this.estadisticas);
+        String csv = serviceEstadistica.generarCSV();
+
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=estadisticas.csv")
                 .body(csv);

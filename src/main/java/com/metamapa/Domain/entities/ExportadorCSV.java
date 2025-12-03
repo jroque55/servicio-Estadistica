@@ -2,10 +2,16 @@ package com.metamapa.Domain.entities;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.metamapa.Domain.dto.input.CatHourDTO;
+import com.metamapa.Domain.dto.input.CategoryDTO;
+import com.metamapa.Domain.dto.input.ProvCatDTO;
+import com.metamapa.Domain.dto.input.ProvinceDTO;
 import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import org.springframework.stereotype.Component;
-
+import com.metamapa.Domain.entities.*;
 import java.lang.reflect.Field;
+
+import static com.metamapa.Domain.entities.EnumTipoEstadistica.CANTSOLICITUDESSPAM;
 
 @Component
 public class ExportadorCSV implements IExportador{
@@ -13,51 +19,85 @@ public class ExportadorCSV implements IExportador{
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public String exportar(EstadisticaOutputDTO obj) {
-        try {
-            Class<?> clazz = obj.getClass();
-            Field[] fields = clazz.getDeclaredFields();
+    public String exportar(InterfaceEstadistica estadistica) {
 
-            StringBuilder sb = new StringBuilder();
-
-            // HEADER
-            for (int i = 0; i < fields.length; i++) {
-                sb.append(fields[i].getName());
-                if (i < fields.length - 1) sb.append(",");
-            }
-            sb.append("\n");
-
-            // VALUES
-            for (int i = 0; i < fields.length; i++) {
-                fields[i].setAccessible(true);
-                Object value = fields[i].get(obj);
-
-                if (value == null) {
-                    sb.append("");
-                } else if (isSimpleValue(value)) {
-                    sb.append(value.toString());
-                } else {
-                    // Serialización para listas u objetos complejos
-                    sb.append("\"").append(mapper.writeValueAsString(value)).append("\"");
-                }
-
-                if (i < fields.length - 1) sb.append(",");
-            }
-
-            return sb.toString();
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error exportando CSV", e);
+        if (estadistica instanceof EstadisticaMaxHechosPorProvinciaDeUnaColeccion e1) {
+            return this.exportarProvincias(e1);
         }
+
+        if (estadistica instanceof EstadisticaCategoriaMaxima e2) {
+            //return this.exportarMaxCategoria(e2);
+        }
+
+        if (estadistica instanceof EstadisticaHoraPorCategoria e3) {
+            return this.exportarMaxHoraCategoria(e3);
+        }
+
+        if (estadistica instanceof EstadisticaProvinciaPorCategoria e4) {
+            return this.exportarMaxProvinciaXCategoria(e4);
+        }
+
+        if (estadistica instanceof EstadisticaSpamEliminacion e5) {
+            return this.exportarSpam(e5);
+        }
+
+        throw new IllegalArgumentException("Tipo de estadística no soportado: " + estadistica.getClass());
     }
 
-    private boolean isSimpleValue(Object value) {
-        return value instanceof String ||
-                value instanceof Integer ||
-                value instanceof Long ||
-                value instanceof Boolean;
+
+
+    public String exportarProvincias(EstadisticaMaxHechosPorProvinciaDeUnaColeccion est) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Coleccion ,Provincia,Cantidad_Hechos\n");
+
+        for (ProvinceDTO p : est.getProvincias()) {
+            sb.append(est.getDiscriminante().getValor()).append(p.getProvincia()).append(",")
+                    .append(p.getCantidad()).append("\n");
+        }
+        return sb.toString();
     }
 
+    public String exportarMaxCategoria(EstadisticaCategoriaMaxima est) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Categoria,Cantidad_Hechos\n");
+
+        for (CategoryDTO p : est.getCategorias()) {
+            sb.append(p.getCategoria()).append(",")
+                    .append(p.getCantidad()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private String exportarMaxHoraCategoria(EstadisticaHoraPorCategoria est) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Categoria,Hora ,Cantidad_hechos\n");
+
+        for (CatHourDTO p : est.getCantidadXHoras()) {
+            sb.append(est.getDiscriminante().getValor()).append(",").append(p.getHora()).append(",")
+                    .append(p.getCantidad()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private String exportarMaxProvinciaXCategoria(EstadisticaProvinciaPorCategoria est) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Categoria,Cantidad_Hechos\n");
+
+        for (ProvCatDTO p : est.getProvincias()) {
+            sb.append(est.getDiscriminante().getValor()).append(",").append(p.getProvincia()).append(",")
+                    .append(p.getCantidad()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private String exportarSpam(EstadisticaSpamEliminacion est) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cantidad_Solicitudes,Cantidad_Spam\n");
+
+        sb.append(est.getTotalDeSolicitudes()).append(",").append(est.getResultado()).append("\n");
+
+        return sb.toString();
+    }
 
 
 
