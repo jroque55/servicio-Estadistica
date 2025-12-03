@@ -3,6 +3,10 @@ package com.metamapa.Controller;
 import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import com.metamapa.Domain.entities.InterfaceEstadistica;
 import com.metamapa.Service.ServiceEstadistica;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,17 @@ public class ControllerEstadistica {
     }
 
     //Que pueda recibir una especie de filtro y envie según corresponda
+    @Operation(summary = "Obtiene todas las estadísticas disponibles")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Estadísticas obtenidas correctamente",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EstadisticaOutputDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "No se encontró ninguna estadística."
+    )
     @GetMapping
     public ResponseEntity<List<EstadisticaOutputDTO>> obtenerEstadisticas(){
         List<EstadisticaOutputDTO> estadisticasDTO = serviceEstadistica.obtenerResultadosDeEstadisticas();
@@ -29,6 +44,18 @@ public class ControllerEstadistica {
         }
         return ResponseEntity.ok(estadisticasDTO); // Código 200
     }
+
+    @Operation(summary = "Obtiene una estadística específica por su ID")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Estadística encontrada correctamente",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EstadisticaOutputDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "El ID de estadística proporcionado no fue encontrado."
+    )
     @GetMapping("/{id_estadistica}")
     public ResponseEntity<EstadisticaOutputDTO> obtenerEstadisticaPorID(@PathVariable String id_estadistica){
         EstadisticaOutputDTO resultado = serviceEstadistica.obtenerResultadoPorID(id_estadistica);
@@ -38,7 +65,16 @@ public class ControllerEstadistica {
         return ResponseEntity.ok(resultado);
     }
 
-
+    @Operation(summary = "Exporta todas las estadísticas a un archivo CSV")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Archivo CSV generado y descargado correctamente",
+            content = @Content(mediaType = "text/csv") // Tipo de contenido CSV
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "No hay datos para exportar (lista de estadísticas vacía)."
+    )
     @GetMapping(value="/exportar", produces = "text/csv")
     public ResponseEntity<String> exportarCSV(){
 
