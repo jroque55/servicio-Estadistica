@@ -10,6 +10,7 @@ import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import org.springframework.stereotype.Component;
 import com.metamapa.Domain.entities.*;
 import java.lang.reflect.Field;
+import com.metamapa.Domain.entities.*;
 
 import static com.metamapa.Domain.entities.EnumTipoEstadistica.CANTSOLICITUDESSPAM;
 
@@ -26,7 +27,7 @@ public class ExportadorCSV implements IExportador{
         }
 
         if (estadistica instanceof EstadisticaCategoriaMaxima e2) {
-            //return this.exportarMaxCategoria(e2);
+           // return this.exportarMaxCategoria(e2);
         }
 
         if (estadistica instanceof EstadisticaHoraPorCategoria e3) {
@@ -48,6 +49,7 @@ public class ExportadorCSV implements IExportador{
 
     public String exportarProvincias(EstadisticaMaxHechosPorProvinciaDeUnaColeccion est) {
         StringBuilder sb = new StringBuilder();
+        sb.append("#").append(est.getClass()+"\n");
         sb.append("Coleccion ,Provincia,Cantidad_Hechos\n");
 
         for (ProvinceDTO p : est.getProvincias()) {
@@ -59,6 +61,7 @@ public class ExportadorCSV implements IExportador{
 
     public String exportarMaxCategoria(EstadisticaCategoriaMaxima est) {
         StringBuilder sb = new StringBuilder();
+        sb.append("#").append(est.getClass()+"\n");
         sb.append("Categoria,Cantidad_Hechos\n");
 
         for (CategoryDTO p : est.getCategorias()) {
@@ -70,6 +73,7 @@ public class ExportadorCSV implements IExportador{
 
     private String exportarMaxHoraCategoria(EstadisticaHoraPorCategoria est) {
         StringBuilder sb = new StringBuilder();
+        sb.append("#").append(est.getClass()+"\n");
         sb.append("Categoria,Hora ,Cantidad_hechos\n");
 
         for (CatHourDTO p : est.getCantidadXHoras()) {
@@ -81,6 +85,7 @@ public class ExportadorCSV implements IExportador{
 
     private String exportarMaxProvinciaXCategoria(EstadisticaProvinciaPorCategoria est) {
         StringBuilder sb = new StringBuilder();
+        sb.append("#").append(est.getClass()+"\n");
         sb.append("Categoria,Cantidad_Hechos\n");
 
         for (ProvCatDTO p : est.getProvincias()) {
@@ -92,6 +97,7 @@ public class ExportadorCSV implements IExportador{
 
     private String exportarSpam(EstadisticaSpamEliminacion est) {
         StringBuilder sb = new StringBuilder();
+        sb.append("#").append(est.getClass()+"\n");
         sb.append("Cantidad_Solicitudes,Cantidad_Spam\n");
 
         sb.append(est.getTotalDeSolicitudes()).append(",").append(est.getResultado()).append("\n");
