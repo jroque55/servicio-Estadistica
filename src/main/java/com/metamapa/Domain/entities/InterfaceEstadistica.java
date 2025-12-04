@@ -18,10 +18,10 @@ public abstract class InterfaceEstadistica {
 
 
     // constante compartida que usan algunas implementaciones //Esto no lo entiendo mucho q digamos
-    public static final String RESULTADO = "Sin resultado";
+    //public static final String RESULTADO = "Sin resultado";
 
     // Helper para acceder al singleton ClienteAgregador desde las subclases
-    protected ClienteAgregador getClienteAgregador() {
+    public ClienteAgregador getClienteAgregador() {
         return ClienteAgregador.getInstance();
     }
 

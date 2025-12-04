@@ -53,7 +53,7 @@ public class ExportadorCSV implements IExportador{
         sb.append("Coleccion ,Provincia,Cantidad_Hechos\n");
         if (est.getProvincias() != null) {
             for (ProvinceDTO p : est.getProvincias()) {
-                sb.append(est.getDiscriminante().getValor()).append(p.getProvincia()).append(",")
+                sb.append(est.getDiscriminante().getValor()).append(",").append(p.getProvincia()).append(",")
                         .append(p.getCantidad()).append("\n");
             }
         }
