@@ -36,6 +36,7 @@ public class ControllerEstadistica {
             description = "No se encontró ninguna estadística."
     )
     @GetMapping
+    @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<List<EstadisticaOutputDTO>> obtenerEstadisticas(){
         List<EstadisticaOutputDTO> estadisticasDTO = serviceEstadistica.obtenerResultadosDeEstadisticas();
         System.out.println("estadistica: " + estadisticasDTO);
@@ -57,6 +58,7 @@ public class ControllerEstadistica {
             description = "El ID de estadística proporcionado no fue encontrado."
     )
     @GetMapping("/{id_estadistica}")
+    @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<EstadisticaOutputDTO> obtenerEstadisticaPorID(@PathVariable String id_estadistica){
         EstadisticaOutputDTO resultado = serviceEstadistica.obtenerResultadoPorID(id_estadistica);
         if (resultado == null) {
@@ -76,6 +78,7 @@ public class ControllerEstadistica {
             description = "No hay datos para exportar (lista de estadísticas vacía)."
     )
     @GetMapping(value="/exportar", produces = "text/csv")
+    @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<String> exportarCSV(){
 
         String csv = serviceEstadistica.generarCSV();

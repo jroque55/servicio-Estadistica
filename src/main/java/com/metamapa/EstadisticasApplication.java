@@ -36,6 +36,7 @@ public class EstadisticasApplication {
         //ClienteAgregador cliente = context.getBean(ClienteAgregador.class);
         ServiceEstadistica service = context.getBean(ServiceEstadistica.class);
         //EstadisticaScheduler scheduler = new EstadisticaScheduler(service);
+        service.actualizarEstadisticas();
         service.actualizarResultadosEstadisticas();
        // List<InterfaceEstadistica> estadisticas = service.getEstadisticas();
 

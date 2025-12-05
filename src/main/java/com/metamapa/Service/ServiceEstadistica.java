@@ -60,7 +60,9 @@ public class ServiceEstadistica {
     //DEBRIA SER UNA LISTA -- DEBERIA CONSIDEREARSE A CAMBIARSE A SOLO EatdisticaOutputDTO
     public List<EstadisticaOutputDTO> obtenerResultadosDeEstadisticas() {
         //MEJORAR
-        return this.factoryEstadistica.crearListaEstadisticaDTO(obtener());
+        List<EstadisticaOutputDTO> listaDto = this.factoryEstadistica.crearListaEstadisticaDTO(obtener());
+        listaDto.removeIf(dto -> dto.getDatos() == null || dto.getDatos().isEmpty());
+        return listaDto;
     }
 
 
