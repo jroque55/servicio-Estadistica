@@ -63,7 +63,7 @@ public class EstadisticaOutputDTO {
         }else new DatoDTO("Sin Resultado", 0L);
 
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
-        this.descripcion = "Hora con mas hechos reportados con la categoría + " + estadistica.getDiscriminante().getValor();
+        this.descripcion = "Hora con mas hechos reportados con la categoría: ";
     }
 
     public EstadisticaOutputDTO(EstadisticaMaxHechosPorProvinciaDeUnaColeccion estadistica) {
@@ -78,7 +78,7 @@ public class EstadisticaOutputDTO {
         }else this.resultado = new DatoDTO("Sin Resultado", 0L);
 
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
-        this.descripcion = "Provincia con más hechos en la colección " + estadistica.getDiscriminante().getValor();
+        this.descripcion = "Provincia con más hechos en la colección: " ;
     }
 
     public EstadisticaOutputDTO(EstadisticaProvinciaPorCategoria estadistica) {
@@ -92,7 +92,7 @@ public class EstadisticaOutputDTO {
             this.resultado = new DatoDTO(estadistica.getResultado().getProvincia(), estadistica.getResultado().getCantidad());
         }else this.resultado = new DatoDTO("Sin Resultado", 0L);
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
-        this.descripcion = "Provincia con más hechos reportados con la categoría + " + estadistica.getDiscriminante().getValor();
+        this.descripcion = "Provincia con más hechos reportados con la categoría: ";
     }
 
     public EstadisticaOutputDTO(EstadisticaSpamEliminacion estadistica) {

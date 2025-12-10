@@ -26,7 +26,7 @@ public class ClienteAgregador {
 
     public List<ProvCatDTO> obtenerCantHechosPorProvinciaSegun(String categoria) {
         return webClient.get()
-                .uri("/provinciaxcat?cat=" + categoria)//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
+                .uri("/provinciaxcat?categoria=" + categoria)//ESTO ES DIFERENTE EN EL AGREGADOR PEROES PAR ADIFERENCIA POR AHORA
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ProvCatDTO>>() {})
                 .block();

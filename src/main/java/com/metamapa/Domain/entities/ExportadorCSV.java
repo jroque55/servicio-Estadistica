@@ -27,7 +27,7 @@ public class ExportadorCSV implements IExportador{
         }
 
         if (estadistica instanceof EstadisticaCategoriaMaxima e2) {
-           // return this.exportarMaxCategoria(e2);
+            return this.exportarMaxCategoria(e2);
         }
 
         if (estadistica instanceof EstadisticaHoraPorCategoria e3) {
