@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estadisticas")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ControllerEstadistica {
     //private List<InterfaceEstadistica> estadisticas;
     private final ServiceEstadistica serviceEstadistica;
