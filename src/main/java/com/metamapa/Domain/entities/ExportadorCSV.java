@@ -49,7 +49,7 @@ public class ExportadorCSV implements IExportador{
 
     public String exportarProvincias(EstadisticaMaxHechosPorProvinciaDeUnaColeccion est) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#").append(est.getClass()+"\n");
+        sb.append("#").append(est.getClass().getSimpleName()+"\n");
         sb.append("Coleccion ,Provincia,Cantidad_Hechos\n");
         if (est.getProvincias() != null) {
             for (ProvinceDTO p : est.getProvincias()) {
@@ -62,7 +62,7 @@ public class ExportadorCSV implements IExportador{
 
     public String exportarMaxCategoria(EstadisticaCategoriaMaxima est) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#").append(est.getClass()+"\n");
+        sb.append("#").append(est.getClass().getSimpleName()+"\n");
         sb.append("Categoria,Cantidad_Hechos\n");
 
         for (CategoryDTO p : est.getCategorias()) {
@@ -74,7 +74,7 @@ public class ExportadorCSV implements IExportador{
 
     private String exportarMaxHoraCategoria(EstadisticaHoraPorCategoria est) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#").append(est.getClass()+"\n");
+        sb.append("#").append(est.getClass().getSimpleName()+"\n");
         sb.append("Categoria,Hora ,Cantidad_hechos\n");
         if(est.getCantidadXHoras() != null) {
             for (CatHourDTO p : est.getCantidadXHoras()) {
@@ -87,7 +87,7 @@ public class ExportadorCSV implements IExportador{
 
     private String exportarMaxProvinciaXCategoria(EstadisticaProvinciaPorCategoria est) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#").append(est.getClass()+"\n");
+        sb.append("#").append(est.getClass().getSimpleName()+"\n");
         sb.append("Categoria,Cantidad_Hechos\n");
         if(est.getProvincias() != null) {
             for (ProvCatDTO p : est.getProvincias()) {
@@ -100,7 +100,7 @@ public class ExportadorCSV implements IExportador{
 
     private String exportarSpam(EstadisticaSpamEliminacion est) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#").append(est.getClass()+"\n");
+        sb.append("#").append(est.getClass().getSimpleName()+"\n");
         sb.append("Cantidad_Solicitudes,Cantidad_Spam\n");
 
         sb.append(est.getTotalDeSolicitudes()).append(",").append(est.getResultado()).append("\n");
