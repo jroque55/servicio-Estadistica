@@ -49,17 +49,13 @@ public class EstadisticaOutputDTO {
     public EstadisticaOutputDTO(EstadisticaHoraPorCategoria estadistica) {
         if(estadistica.getCantidadXHoras() != null){
             estadistica.getCantidadXHoras().forEach(estadisticaCategoria -> {
-                this.datos.add(new DatoDTO(estadisticaCategoria.getHora()>=10?
-                        estadisticaCategoria.getHora().toString()+":00" :
-                        "0"+ estadisticaCategoria.getHora().toString()+":00",
+                this.datos.add(new DatoDTO(estadisticaCategoria.getHora().toString(),
                         estadisticaCategoria.getCantidad()));
             });
         }else this.datos = new ArrayList<>();
         if(estadistica.getResultado() != null){
-            this.resultado = new DatoDTO(estadistica.getResultado().getHora()>=10?
-                    estadistica.getResultado().getHora().toString()+":00" :
-                    "0"+ estadistica.getResultado().getHora().toString()+":00"
-                    , estadistica.getResultado().getCantidad());
+            this.resultado = new DatoDTO(estadistica.getResultado().getHora().toString(),
+                    estadistica.getResultado().getCantidad());
         }else new DatoDTO("Sin Resultado", 0L);
 
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());

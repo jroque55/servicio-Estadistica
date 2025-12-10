@@ -24,14 +24,14 @@ public class EstadisticasApplication {
     var context = SpringApplication.run(EstadisticasApplication.class, args);
         System.out.println("Servicio de Estadistica INICIADA");
         IRepositoryEstadisticas repo = context.getBean(IRepositoryEstadisticas.class);
-        System.out.println(repo.findAll().size());
-        List<CategoryDTO> categorias = List.of(
-                new CategoryDTO("Electrónica", 120L),
-                new CategoryDTO("Ropa", 85L),
-                new CategoryDTO("Hogar", 42L),
-                new CategoryDTO("Deportes", 67L),
-                new CategoryDTO("Libros", 33L)
-        );
+       // System.out.println(repo.findAll().size());
+       // List<CategoryDTO> categorias = List.of(
+       //         new CategoryDTO("Electrónica", 120L),
+       //         new CategoryDTO("Ropa", 85L),
+       //         new CategoryDTO("Hogar", 42L),
+       //         new CategoryDTO("Deportes", 67L),
+       //         new CategoryDTO("Libros", 33L)
+       // );
 
         //ClienteAgregador cliente = context.getBean(ClienteAgregador.class);
         ServiceEstadistica service = context.getBean(ServiceEstadistica.class);
@@ -59,11 +59,11 @@ public class EstadisticasApplication {
         */
         // ExportadorCSV exportador= context.getBean(ExportadorCSV.class);
         //String valorCSV = exportador.exportar(estadisticaOutputDTO);
-        String verEstadisticas = service.generarCSV();
-        System.out.println("Valor Exportable ");
-        System.out.println(" " +verEstadisticas);
+        //String verEstadisticas = service.generarCSV();
+        //System.out.println("Valor Exportable ");
+        //System.out.println(" " +verEstadisticas);
 
-        System.out.println("Mandale Mecha");
+        //System.out.println("Mandale Mecha");
 
 
 
