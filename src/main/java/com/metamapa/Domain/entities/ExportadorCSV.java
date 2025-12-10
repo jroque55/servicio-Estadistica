@@ -67,7 +67,7 @@ public class ExportadorCSV implements IExportador{
 
         for (CategoryDTO p : est.getCategorias()) {
             sb.append(p.getCategoria()).append(",")
-                    .append(p.getCantidad()).append("\n");
+                    .append(p.getCantidadHechos()).append("\n");
         }
         return sb.toString();
     }

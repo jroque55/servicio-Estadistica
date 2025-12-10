@@ -102,7 +102,8 @@ public class ServiceEstadistica {
             }
         }
         //crea estdistica relacionada con categoria
-        EstadisticaCategoriaMaxima estadisticaMaxCategori =new EstadisticaCategoriaMaxima();
+        EstadisticaCategoriaMaxima estadisticaMaxCategoria =new EstadisticaCategoriaMaxima();
+        this.estadisticas.add(estadisticaMaxCategoria);
         for(String categoria: categorias){
             if(categoria!=null){
                 //Estadistica hora  por categoria
@@ -115,8 +116,8 @@ public class ServiceEstadistica {
 
 
             // Estadistica Spam
-            //EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
-
+            EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
+            this.estadisticas.add(estadisticaSpam);
             //Ejecutamos para agregar informacion a todas las estadisticas , y luego persistimos
 
             //this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());

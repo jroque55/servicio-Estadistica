@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class CategoryDTO {
     private String categoria;
-    private Long cantidad;
+    private Long cantidadHechos;
 
     public CategoryDTO(String categoria, Long cantidad) {
         this.categoria = categoria;
-        this.cantidad = cantidad;
+        this.cantidadHechos = cantidad;
     }
 }

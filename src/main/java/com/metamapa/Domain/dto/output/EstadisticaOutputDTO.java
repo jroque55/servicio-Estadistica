@@ -40,11 +40,11 @@ public class EstadisticaOutputDTO {
         if (estadistica.getCategorias() != null) {
             estadistica.getCategorias().forEach(estadisticaCategoria -> {
                 this.datos.add(new DatoDTO(estadisticaCategoria.getCategoria(),
-                        estadisticaCategoria.getCantidad()));
+                        estadisticaCategoria.getCantidadHechos()));
             });
         } else this.datos = new ArrayList<>();
         if(estadistica.getResultado() != null){
-            this.resultado = new DatoDTO(estadistica.getResultado().getCategoria(), estadistica.getResultado().getCantidad());
+            this.resultado = new DatoDTO(estadistica.getResultado().getCategoria(), estadistica.getResultado().getCantidadHechos());
         } else this.resultado = new DatoDTO("Sin Resultado", 0L);
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
         this.descripcion = "Categoria con mas hechos";
