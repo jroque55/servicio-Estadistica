@@ -6,13 +6,7 @@ import com.metamapa.Domain.dto.input.CatHourDTO;
 import com.metamapa.Domain.dto.input.CategoryDTO;
 import com.metamapa.Domain.dto.input.ProvCatDTO;
 import com.metamapa.Domain.dto.input.ProvinceDTO;
-import com.metamapa.Domain.dto.output.EstadisticaOutputDTO;
 import org.springframework.stereotype.Component;
-import com.metamapa.Domain.entities.*;
-import java.lang.reflect.Field;
-import com.metamapa.Domain.entities.*;
-
-import static com.metamapa.Domain.entities.EnumTipoEstadistica.CANTSOLICITUDESSPAM;
 
 @Component
 public class ExportadorCSV implements IExportador{
@@ -67,7 +61,7 @@ public class ExportadorCSV implements IExportador{
 
         for (CategoryDTO p : est.getCategorias()) {
             sb.append(p.getCategoria()).append(",")
-                    .append(p.getCantidadHechos()).append("\n");
+                    .append(p.getCantidad()).append("\n");
         }
         return sb.toString();
     }

@@ -116,14 +116,15 @@ public class ServiceEstadistica {
 
 
             // Estadistica Spam
-            EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
-            this.estadisticas.add(estadisticaSpam);
+
             //Ejecutamos para agregar informacion a todas las estadisticas , y luego persistimos
 
             //this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
             //this.repo.saveAll(this.estadisticas)
 
         }
+        EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
+        this.estadisticas.add(estadisticaSpam);
         repo.saveAll(this.estadisticas);
         EstadisticaUpdateMarker marker = new EstadisticaUpdateMarker();
         marker.setLastUpdate(LocalDateTime.now());

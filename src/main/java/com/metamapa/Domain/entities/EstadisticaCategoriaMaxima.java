@@ -52,7 +52,7 @@ public class EstadisticaCategoriaMaxima extends InterfaceEstadistica {
             return;
         }
 
-        categorias.sort(Comparator.comparing(CategoryDTO::getCantidadHechos).reversed());
+        categorias.sort(Comparator.comparing(CategoryDTO::getCantidad).reversed());
 
         this.setResultado(categorias.get(0));
 

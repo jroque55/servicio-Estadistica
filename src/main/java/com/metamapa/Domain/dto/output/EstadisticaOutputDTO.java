@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Data // Proporciona Getters, Setters, toString, equals y hashCode
 @NoArgsConstructor // Genera el constructor sin argumentos (el 'public EstadisticaOutputDTO() {}')
@@ -40,11 +39,11 @@ public class EstadisticaOutputDTO {
         if (estadistica.getCategorias() != null) {
             estadistica.getCategorias().forEach(estadisticaCategoria -> {
                 this.datos.add(new DatoDTO(estadisticaCategoria.getCategoria(),
-                        estadisticaCategoria.getCantidadHechos()));
+                        estadisticaCategoria.getCantidad()));
             });
         } else this.datos = new ArrayList<>();
         if(estadistica.getResultado() != null){
-            this.resultado = new DatoDTO(estadistica.getResultado().getCategoria(), estadistica.getResultado().getCantidadHechos());
+            this.resultado = new DatoDTO(estadistica.getResultado().getCategoria(), estadistica.getResultado().getCantidad());
         } else this.resultado = new DatoDTO("Sin Resultado", 0L);
         this.discriminante = new DiscriminanteDTO(estadistica.getDiscriminante());
         this.descripcion = "Categoria con mas hechos";
