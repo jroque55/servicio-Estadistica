@@ -18,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
 class ServiceEstadisticaMockitoTest {
 
     static class ExportadorMock implements IExportador {
@@ -29,24 +28,32 @@ class ServiceEstadisticaMockitoTest {
     }
 
     static class ClientMock extends ClienteAgregador {
-        public ClientMock() { super(org.springframework.web.reactive.function.client.WebClient.builder()); }
+        public ClientMock() {
+            super(org.springframework.web.reactive.function.client.WebClient.builder());
+        }
 
         @Override
-        public List<String> obtenerColecciones() { return Arrays.asList("col1","col2"); }
+        public List<String> obtenerColecciones() {
+            return Arrays.asList("col1", "col2");
+        }
 
         @Override
-        public List<String> obtenerCategorias() { return Arrays.asList("cat1","cat2"); }
+        public List<String> obtenerCategorias() {
+            return Arrays.asList("cat1", "cat2");
+        }
     }
+
+    private ServiceEstadistica service;
+    private IRepositoryEstadisticas repo;
+    private RepositoryEstadisticaUpdate repoUpdate;
 
     @BeforeEach
     void setup() {
+        // Inicializa el singleton mockeado
         new ClientMock();
-    }
 
-    @Test
-    void actualizarEstadisticas_creaEstadisticas_segunColeccionesYCategorias() {
-        IRepositoryEstadisticas repo = Mockito.mock(IRepositoryEstadisticas.class);
-        RepositoryEstadisticaUpdate repoUpdate = Mockito.mock(RepositoryEstadisticaUpdate.class);
+        repo = Mockito.mock(IRepositoryEstadisticas.class);
+        repoUpdate = Mockito.mock(RepositoryEstadisticaUpdate.class);
 
         when(repo.saveAll(any())).thenAnswer(invocation -> {
             Iterable<InterfaceEstadistica> it = invocation.getArgument(0);
@@ -57,19 +64,71 @@ class ServiceEstadisticaMockitoTest {
         });
 
         doNothing().when(repo).deleteAll();
-        when(repoUpdate.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ServiceEstadistica service = new ServiceEstadistica(ClienteAgregador.getInstance(), repo, repoUpdate, new ExportadorMock(), new FactoryEstadisticaDTO());
+        when(repoUpdate.save(any()))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
+        service = new ServiceEstadistica(
+                ClienteAgregador.getInstance(),
+                repo,
+                repoUpdate,
+                new ExportadorMock(),
+                new FactoryEstadisticaDTO()
+        );
+    }
+
+
+    @Test
+    void creaEstadisticasUnicas() {
+        service.actualizarEstadisticas();
+
+        assertTrue(
+                service.obtener().stream()
+                        .anyMatch(e -> e instanceof EstadisticaCategoriaMaxima)
+        );
+
+        assertTrue(
+                service.obtener().stream()
+                        .anyMatch(e -> e instanceof EstadisticaSpamEliminacion)
+        );
+    }
+
+    @Test
+    void actualizarEstadisticas_creaTodasLasEstadisticasEsperadas() {
         service.actualizarEstadisticas();
 
         List<InterfaceEstadistica> lista = service.obtener();
-        assertNotNull(lista);
-        assertEquals(2 + 2*2, lista.size());
 
-        verify(repo, times(1)).saveAll(any());
-        verify(repoUpdate, times(1)).save(any(EstadisticaUpdateMarker.class));
+        assertEquals(8, lista.size());
     }
+    @Test
+    void creaEstadisticasPorColeccion() {
+        service.actualizarEstadisticas();
+
+        long count = service.obtener().stream()
+                .filter(e -> e instanceof EstadisticaMaxHechosPorProvinciaDeUnaColeccion)
+                .count();
+
+        assertEquals(2, count);
+    }
+
+    @Test
+    void creaEstadisticasPorCategoria() {
+        service.actualizarEstadisticas();
+
+        long hora = service.obtener().stream()
+                .filter(e -> e instanceof EstadisticaHoraPorCategoria)
+                .count();
+
+        long provincia = service.obtener().stream()
+                .filter(e -> e instanceof EstadisticaProvinciaPorCategoria)
+                .count();
+
+        assertEquals(2, hora);
+        assertEquals(2, provincia);
+    }
+
+
 
     @Test
     void generarCSV_laConcatenaResultadosExportador() {
