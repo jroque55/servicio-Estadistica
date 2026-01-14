@@ -15,7 +15,7 @@ public class ClienteAgregador {
     private static volatile ClienteAgregador INSTANCE;
 
     public ClienteAgregador(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl("http://localhost:8081/estadisticas").build();
+        this.webClient = builder.baseUrl("https://agregador-79iw.onrender.com/estadisticas").build();
         // set singleton reference
         INSTANCE = this;
     }
