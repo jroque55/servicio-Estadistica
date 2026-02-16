@@ -8,6 +8,7 @@ import com.metamapa.Domain.entities.repository.IRepositoryEstadisticas;
 import com.metamapa.Domain.entities.repository.RepositoryEstadisticaUpdate;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class ServiceEstadistica {
 
@@ -44,14 +45,17 @@ public class ServiceEstadistica {
     public synchronized void actualizarResultadosEstadisticas() {
         if(this.estadisticas.isEmpty()){
             this.estadisticas = repo.findAll();
+            log.debug("Cargando estadísticas desde BD, {} encontradas", this.estadisticas.size());
         }
 
         for (InterfaceEstadistica est : this.estadisticas) {
             est.actualizarResultado();        // llama al método propio de la clase
             repo.save(est);                   // guarda el nuevo resultado
+            log.debug("Estadística '{}' actualizada y guardada", est.getId());
+
         }
         this.ultimoUpdateLocal = LocalDateTime.now();
-        System.out.println("Estadísticas actualizadas y persistidas");
+        log.info("Estadísticas actualizadas y persistidas");
     }
 
     //Debería tener una lista o está bien que los vaya a buscar siempre?
@@ -62,6 +66,8 @@ public class ServiceEstadistica {
         //MEJORAR
         List<EstadisticaOutputDTO> listaDto = this.factoryEstadistica.crearListaEstadisticaDTO(obtener());
         listaDto.removeIf(dto -> dto.getDatos() == null || dto.getDatos().isEmpty());
+        log.debug("Resultados de estadísticas obtenidos, {} DTOs válidos", listaDto.size());
+
         return listaDto;
     }
 
@@ -77,32 +83,41 @@ public class ServiceEstadistica {
     }
 
     public String generarCSV() {
+        log.info("Obteniendo estadísticas para exportar a CSV");
         List<InterfaceEstadistica> estadisticas = this.obtener();
+        log.debug("Se encontraron {} estadísticas para exportar", estadisticas.size());
         String estadisticaCSV ="";
         for(InterfaceEstadistica est :estadisticas ){
             String aExportar = this.exportador.exportar(est);
             estadisticaCSV +=aExportar;
 
         }
-
+        log.info("Generación de CSV completada, longitud total: {} caracteres", estadisticaCSV.length());
         return estadisticaCSV;
+
     }
 
     public synchronized void actualizarEstadisticas() {
+
+        log.info("Iniciando actualización completa de estadísticas");
         List<String> colecciones = this.clienteAgregador.obtenerColecciones();
         List<String> categorias = this.clienteAgregador.obtenerCategorias();
         this.estadisticas = new ArrayList<>();
         repo.deleteAll();
+        log.debug("Se eliminaron todas las estadísticas previas");
         //crearEstdisticas
         //crea estadistica relacionada a la coleccion
         for(String coleccion : colecciones){
             if(coleccion!=null) {
                 InterfaceEstadistica estadistica = this.crearEstadisticaColeccion(coleccion);
                 this.estadisticas.add(estadistica);
+                log.debug("Estadística de colección '{}' creada", coleccion);
             }
         }
         //crea estdistica relacionada con categoria
         EstadisticaCategoriaMaxima estadisticaMaxCategoria =new EstadisticaCategoriaMaxima();
+        log.debug("Estadística de categoría máxima agregada");
+
         this.estadisticas.add(estadisticaMaxCategoria);
         for(String categoria: categorias){
             if(categoria!=null){
@@ -112,6 +127,7 @@ public class ServiceEstadistica {
                 //Estadistica provincia por categoria
                 InterfaceEstadistica estadistica1=this.crearEstadiscaProvinciaPorCategoria(categoria);
                 this.estadisticas.add(estadistica1);
+                log.debug("Estadísticas de hora y provincia para categoría '{}' creadas", categoria);
             }
 
 
@@ -125,7 +141,12 @@ public class ServiceEstadistica {
         }
         EstadisticaSpamEliminacion estadisticaSpam = new EstadisticaSpamEliminacion();
         this.estadisticas.add(estadisticaSpam);
+        log.debug("Estadística de spam agregada");
+
+
         repo.saveAll(this.estadisticas);
+        log.info("Todas las estadísticas guardadas, total: {}", this.estadisticas.size());
+
         EstadisticaUpdateMarker marker = new EstadisticaUpdateMarker();
         marker.setLastUpdate(LocalDateTime.now());
         repoUpdate.save(marker);
@@ -134,6 +155,7 @@ public class ServiceEstadistica {
         //this.estadisticas.stream().forEach(e-> e.actualizarEstadistica());
         //.repo.saveAll(this.estadisticas);
 
+        log.info("Marcador de actualización guardado: {}", this.ultimoUpdateLocal);
 
         //La idea es que acà le pida las cosas al agregador, es decir dame todas las colecciones,
         //TODAS LAS PROVINCIa Y TODAS LAS CACTEGORIAS

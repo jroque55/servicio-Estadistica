@@ -16,6 +16,7 @@ public class ExportadorCSV implements IExportador{
     @Override
     public String exportar(InterfaceEstadistica estadistica) {
 
+
         if (estadistica instanceof EstadisticaMaxHechosPorProvinciaDeUnaColeccion e1) {
             return this.exportarProvincias(e1);
         }

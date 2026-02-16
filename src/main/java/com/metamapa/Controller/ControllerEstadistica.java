@@ -7,15 +7,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.constraints.NotBlank;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/estadisticas")
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class ControllerEstadistica {
     //private List<InterfaceEstadistica> estadisticas;
     private final ServiceEstadistica serviceEstadistica;
@@ -39,9 +42,10 @@ public class ControllerEstadistica {
     @GetMapping
     @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<List<EstadisticaOutputDTO>> obtenerEstadisticas(){
+        log.info("Obteniendo todas las estadísticas disponibles");
         List<EstadisticaOutputDTO> estadisticasDTO = serviceEstadistica.obtenerResultadosDeEstadisticas();
         System.out.println("estadistica: " + estadisticasDTO);
-        if (estadisticasDTO == null) {
+        if (estadisticasDTO == null || estadisticasDTO.isEmpty()) {
             return ResponseEntity.noContent().build(); // Código 204
         }
         return ResponseEntity.ok(estadisticasDTO); // Código 200
@@ -60,9 +64,9 @@ public class ControllerEstadistica {
     )
     @GetMapping("/{id_estadistica}")
     @CrossOrigin(origins= "http://localhost:3000")
-    public ResponseEntity<EstadisticaOutputDTO> obtenerEstadisticaPorID(@PathVariable String id_estadistica){
+    public ResponseEntity<EstadisticaOutputDTO> obtenerEstadisticaPorID(@NotBlank @PathVariable String id_estadistica){
         EstadisticaOutputDTO resultado = serviceEstadistica.obtenerResultadoPorID(id_estadistica);
-        if (resultado == null) {
+        if (resultado == null || resultado.getDatos().isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(resultado);
@@ -82,9 +86,11 @@ public class ControllerEstadistica {
     @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<String> exportarCSV(){
 
+        log.info("Iniciando exportado de estadísticas a CSV");
         String csv = serviceEstadistica.generarCSV();
 
 
+        log.debug("CSV generado, longitud total: {} caracteres", csv.length());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=estadisticas.csv")
                 .body(csv);
