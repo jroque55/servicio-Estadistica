@@ -19,7 +19,7 @@ public class agregadorHealthIndicator extends AbstractDependencyHealthIndicator 
 
     public agregadorHealthIndicator(
             RestTemplateBuilder builder,
-            @Value("https://agregador-tp-pzhj.onrender.com") String url) {
+            @Value("https://agregador-tp-pzhj.onrender.com/") String url) {
 
         this.restTemplate = builder
                 .setConnectTimeout(Duration.ofSeconds(2))

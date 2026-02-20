@@ -1,4 +1,4 @@
-package com.metamapa.config;
+package com.metamapa.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
