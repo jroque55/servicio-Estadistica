@@ -17,7 +17,7 @@ public class CorsConfig {
                         .allowedOrigins(
                                 "http://localhost:3000",
                                 "https://front-metamapa-lo3l.vercel.app",
-                                "https://front-metamapa-dun.vercel.app/"
+                                "https://front-metamapa-dun.vercel.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
