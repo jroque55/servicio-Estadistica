@@ -30,7 +30,7 @@ public class MonitorAdminController {
         database.markDown();
     }
 
-    @PostMapping("/fail/fuente-dinamica")
+    @PostMapping("/fail/agregador")
     public void failFuenteDinamica() {
         agregador.markDown();
     }
