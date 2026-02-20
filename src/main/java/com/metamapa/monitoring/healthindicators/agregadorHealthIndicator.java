@@ -15,48 +15,48 @@ import java.time.Duration;
 public class agregadorHealthIndicator extends AbstractDependencyHealthIndicator {
 
     private final RestTemplate restTemplate;
-    private final String url;
+    private final String healthUrl;
 
     public agregadorHealthIndicator(
             RestTemplateBuilder builder,
-            @Value("https://agregador-79iw.onrender.com/estadisticas") String url) {
+            @Value("https://agregador-tp-pzhj.onrender.com") String url) {
 
         this.restTemplate = builder
                 .setConnectTimeout(Duration.ofSeconds(2))
                 .setReadTimeout(Duration.ofSeconds(3))
                 .build();
-        this.url = url;
+        this.healthUrl = url + "/actuator/health";
     }
 
     @Override
     protected String dependencyName() {
-        return "fuenteDinamica";
+        return "agregador";
     }
 
     @Override
     protected String downMessage() {
-        return "Fuente dinamica no disponible";
+        return "Agregador no disponible";
     }
 
     @Override
     public boolean estaDisponible() {
         try {
             ResponseEntity<String> response =
-                    restTemplate.getForEntity(url, String.class);
+                    restTemplate.getForEntity(healthUrl, String.class);
 
             boolean ok = response.getStatusCode().is2xxSuccessful();
             if (!ok) {
-                log.warn("FuenteDinamica respondió con código {} para URL {}", response.getStatusCode(), url);
+                log.warn("Agregador respondió con código {} para URL {}", response.getStatusCode(), healthUrl);
             }else{
-                log.info("FuenteDinamica respondió correctamente con código {} para URL {}", response.getStatusCode(), url);
+                log.info("Agregador respondió correctamente con código {} para URL {}", response.getStatusCode(), healthUrl);
             }
             return ok;
 
         } catch (RestClientException ex) {
-            log.error("Error al verificar FuenteDinamica ({}): {}", url, ex.getMessage());
+            log.error("Error al verificar Agregador ({}): {}", healthUrl, ex.getMessage());
             return false;
         } catch (Exception ex) {
-            log.error("Excepción inesperada al verificar FuenteDinamica: {}", ex.getMessage(), ex);
+            log.error("Excepción inesperada al verificar Agregador: {}", ex.getMessage(), ex);
             return false;
         }
     }
