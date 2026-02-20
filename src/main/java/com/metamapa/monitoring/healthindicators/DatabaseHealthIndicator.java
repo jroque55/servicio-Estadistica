@@ -27,6 +27,10 @@ public class DatabaseHealthIndicator extends AbstractDependencyHealthIndicator {
 
     @Override
     public boolean estaDisponible() {
+        if (this.getForceDown()) {
+            log.warn("Estado DOWN forzado por ADMIN para 'database'");
+            return false;
+        }
         try {
             Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
             boolean ok = result != null && result == 1;

@@ -40,6 +40,10 @@ public class agregadorHealthIndicator extends AbstractDependencyHealthIndicator 
 
     @Override
     public boolean estaDisponible() {
+            if (this.getForceDown()) {
+                log.warn("Estado DOWN forzado por ADMIN para 'agregador'");
+                return false;
+            }
         try {
             ResponseEntity<String> response =
                     restTemplate.getForEntity(healthUrl, String.class);

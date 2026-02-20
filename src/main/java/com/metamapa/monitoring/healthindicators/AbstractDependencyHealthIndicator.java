@@ -81,4 +81,8 @@ public abstract class AbstractDependencyHealthIndicator implements HealthIndicat
         // En este diseño, la recuperación se maneja a través de un método que podría resetear el flag de forzado
         // y permitir que el health check normal vuelva a determinar el estado real de la dependencia
     }
+
+    protected boolean getForceDown() {
+        return this.forceDown;
+    }
 }
