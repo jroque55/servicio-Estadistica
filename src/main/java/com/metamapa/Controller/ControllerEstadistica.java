@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/estadisticas")
-//@CrossOrigin(origins = "http://localhost:3000")
 public class ControllerEstadistica {
     //private List<InterfaceEstadistica> estadisticas;
     private final ServiceEstadistica serviceEstadistica;
@@ -40,7 +39,6 @@ public class ControllerEstadistica {
             description = "No se encontró ninguna estadística."
     )
     @GetMapping
-    @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<List<EstadisticaOutputDTO>> obtenerEstadisticas(){
         log.info("Obteniendo todas las estadísticas disponibles");
         List<EstadisticaOutputDTO> estadisticasDTO = serviceEstadistica.obtenerResultadosDeEstadisticas();
@@ -63,7 +61,6 @@ public class ControllerEstadistica {
             description = "El ID de estadística proporcionado no fue encontrado."
     )
     @GetMapping("/{id_estadistica}")
-    @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<EstadisticaOutputDTO> obtenerEstadisticaPorID(@NotBlank @PathVariable String id_estadistica){
         EstadisticaOutputDTO resultado = serviceEstadistica.obtenerResultadoPorID(id_estadistica);
         if (resultado == null || resultado.getDatos().isEmpty()) {
@@ -83,7 +80,6 @@ public class ControllerEstadistica {
             description = "No hay datos para exportar (lista de estadísticas vacía)."
     )
     @GetMapping(value="/exportar", produces = "text/csv")
-    @CrossOrigin(origins= "http://localhost:3000")
     public ResponseEntity<String> exportarCSV(){
 
         log.info("Iniciando exportado de estadísticas a CSV");
