@@ -46,7 +46,7 @@ public class ServicioDeMonitoreoDeDependencias {
         }
     }
 
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelay = 1500000) //
     public void heartbeat() {
         try {
             boolean databaseOk = database.estaDisponible();
